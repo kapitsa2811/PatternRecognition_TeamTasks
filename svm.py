@@ -36,5 +36,5 @@ trainFeatures = train[:, 1:]
 testLabels = test[:, 0]
 trainLabels = train[:, 0]
 
-# We no longer need the combined samples
+# We no longer need the samples with the labels
 del train, test
