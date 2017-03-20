@@ -1,6 +1,8 @@
 """
 Authors:
 - Livio Baetscher
+- Carl Balmer
+- Mathias Fuchs
 - Manuela Haefliger
 - Marc-Antoine Jacques
 Date created: 20/3/2017
