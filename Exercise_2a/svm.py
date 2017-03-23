@@ -45,6 +45,9 @@ linear_svc = svm.SVC(kernel='linear', C=1, gamma=0.002)
 linear_svc.fit(trainFeatures, trainLabels)
 predicted_labels_linear = linear_svc.predict(testFeatures)
 accuracy_linear = np.sum(np.equal(predicted_labels_linear, testLabels))/len(testLabels)
+scores = cross_val_score(clf, testFeatures, testLabels, cv=5)
+scores
+
 
 # Example for SVM with RBF kernel
 
