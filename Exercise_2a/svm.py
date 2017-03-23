@@ -37,4 +37,17 @@ testLabels = test[:, 0]
 trainLabels = train[:, 0]
 
 # We no longer need the samples with the labels
-del train, test
+del train, test, reader, f
+
+# Example for SVM with linear kernel
+
+linear_svc = svm.SVC(kernel='linear', C=1, gamma=0.002)
+linear_svc.fit(trainFeatures, trainLabels)
+linear_svc.predict(testFeatures)
+
+# Example for SVM with RBF kernel
+
+rbf_svc = svm.SVC(kernel='rbf', C=1, gamma=0.002)
+rbf_svc.fit(trainFeatures, trainLabels)
+rbf_svc.predict(testFeatures)
+
