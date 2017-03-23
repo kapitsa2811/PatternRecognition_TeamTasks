@@ -1,13 +1,9 @@
 """
 Team: Over9000
-Authors:
-- Livio Baetscher
-- Carl Balmer
-- Mathias Fuchs
-- Manuela Haefliger
-- Marc-Antoine Jacques
+
 Date created: 20/3/2017
-Date last modified: 20/3/2017
+Date last modified: 23/3/2017
+
 Python Version: 3.6
 
 Pattern Recognition - Exercise 2a
@@ -15,15 +11,15 @@ Pattern Recognition - Exercise 2a
 
 import csv
 import numpy as np
-import scipy.stats
-from sklearn import svm
-from sklearn.model_selection import RandomizedSearchCV
+import sklearn.svm
+import optunity
+import optunity.metrics
 
-with open('Exercise_2a/data/train.csv', 'r') as f:
+with open('train.csv', 'r') as f:
     reader = csv.reader(f)
     train = list(reader)
 
-with open('Exercise_2a/data/test.csv', 'r') as f:
+with open('test.csv', 'r') as f:
     reader = csv.reader(f)
     test = list(reader)
 
@@ -42,67 +38,70 @@ trainLabels = train[:, 0]
 # We no longer need the samples with labels and the objects for import
 del train, test, reader, f
 
-
 # ---------------------------------------------------------------------------------------------------------------------
-# settings
 
-num_of_iter = 10
-num_of_cv_sets = 5
-dist_param_C = 30
-dist_param_gamma = 0.1
+trainFeatures = trainFeatures[:1000, :]
+trainLabels = trainLabels[:1000]
+testFeatures = testFeatures[:20, :]
+testLabels = testLabels[:20]
 
 # ---------------------------------------------------------------------------------------------------------------------
 # linear kernel
 
-# train svc with cross validation (divided in 'num_of_cv_sets' sets) for 'num_of_iter' random parameters C
-# which are chosen from distribution exp(dist_param_C)
-svc_linear = svm.SVC(kernel='linear')
-random_search_linear = RandomizedSearchCV(svc_linear, {'C': scipy.stats.expon(scale=dist_param_C)}, cv=num_of_cv_sets, scoring='accuracy', n_iter=num_of_iter)
-random_search_linear.fit(trainFeatures, trainLabels)
-# read out the chosen values for C
-C_chosen_linear = np.array(random_search_linear.cv_results_['param_C'], dtype=float)
-# read out the mean accuracy for the cross-validation
-mean_acc_linear = random_search_linear.cv_results_['mean_test_score']
-best_C_linear = random_search_linear.best_params_
-# train with chosen C
-svc_best_linear = svm.SVC(kernel='linear', C=best_C_linear)
-svc_best_linear.fit(trainFeatures, trainLabels)
-# predict test set
-predicted_labels_linear = svc_best_linear.predict(testFeatures)
-# calculate accuracy
-accuracy_linear = np.sum(np.equal(predicted_labels_linear, testLabels))/len(testLabels)
 
-print(C_chosen_linear)
-print(mean_acc_linear)
-print(best_C_linear)
-print(accuracy_linear)
+@optunity.cross_validated(x=trainFeatures.tolist(), y=trainLabels.tolist(), num_folds=5)
+def svm_linear_tuned_acc(x_train, y_train, x_test, y_test, C):
+    model = sklearn.svm.SVC(kernel='linear', C=C).fit(x_train, y_train)
+    y_pred = model.predict(x_test)
+    acc = np.sum(np.equal(y_test, y_pred))/len(y_test)
+    return acc
+
+#optimal_linear_pars, info_linear, _ = optunity.maximize(svm_linear_tuned_acc, num_evals=10, C=[0, 5])
+optimal_linear_pars, info_linear, _ = optunity.maximize(svm_linear_tuned_acc, num_evals=20, C=[0, 5], pmap=optunity.pmap)
+
+print()
+print("--- LINEAR KERNEL ---")
+print("Optimal parameters: " + str(optimal_linear_pars))
+print("Accuracy of tuned SVM with linear kernel: %1.3f" % info_linear.optimum)
+
+df_linear = optunity.call_log2dataframe(info_linear.call_log)
+print(df_linear)
+
+
+svc_best_linear = sklearn.svm.SVC(kernel='linear', C=optimal_linear_pars['C'])
+svc_best_linear.fit(trainFeatures, trainLabels)
+predicted_labels_linear = svc_best_linear.predict(testFeatures)
+accuracy_linear = float(np.sum(np.equal(predicted_labels_linear, testLabels))/len(testLabels))
+
+print("Accuracy of SVM with linear kernel and optimal parameter C = {:1.3f} on training set is {:1.3f}".format(optimal_linear_pars['C'], accuracy_linear))
 
 
 # ---------------------------------------------------------------------------------------------------------------------
 # RBF kernel
 
-# train svc with cross validation (divided in 'num_of_cv_sets' sets) for 'num_of_iter' random parameters C and gamma,
-# which are chosen from distributions exp(dist_param_C) and exp(dist_param_gamma)
-svc_rbf = svm.SVC(kernel='rbf')
-random_search_rbf = RandomizedSearchCV(svc_rbf, {'C': scipy.stats.expon(scale=dist_param_C), 'gamma': scipy.stats.expon(scale=dist_param_gamma)}, cv=num_of_cv_sets, scoring='accuracy', n_iter=num_of_iter)
-random_search_rbf.fit(trainFeatures, trainLabels)
-# read out the chosen values for C and gamma
-C_chosen_rbf = np.array(random_search_rbf.cv_results_['param_C'], dtype=float)
-gamma_chosen_rbf = np.array(random_search_rbf.cv_results_['param_gamma'], dtype=float)
-# read out the mean accuracy for the cross-validation
-mean_acc_rbf = random_search_rbf.cv_results_['mean_test_score']
-best_C_rbf = random_search_linear.best_params_[0]
-best_gamma_rbf = random_search_linear.best_params_[1]
-# train with chosen C and gamma
-svc_best_rbf = svm.SVC(kernel='rbf', C=best_C_rbf, gamma=best_gamma_rbf)
-svc_best_rbf.fit(trainFeatures, trainLabels)
-# predict test set
-predicted_labels_rbf = svc_best_rbf.predict(testFeatures)
-# calculate accuracy
-accuracy_rbf = np.sum(np.equal(predicted_labels_rbf, testLabels))/len(testLabels)
+@optunity.cross_validated(x=trainFeatures.tolist(), y=trainLabels.tolist(), num_folds=5)
+def svm_rbf_tuned_acc(x_train, y_train, x_test, y_test, C, gamma):
+    model = sklearn.svm.SVC(kernel='rbf', C=C, gamma=gamma).fit(x_train, y_train)
+    y_pred = model.predict(x_test)
+    acc = np.sum(np.equal(y_test, y_pred))/len(y_test)
+    return acc
 
-print(C_chosen_rbf)
-print(gamma_chosen_rbf)
-print(mean_acc_rbf)
-print(best_C_rbf)
-print(accuracy_rbf)
+# optimal_rbf_pars, info_rbf, _ = optunity.maximize(svm_rbf_tuned_acc, num_evals=10, C=[0, 5], gamma=[0.00001, 0.001])
+optimal_rbf_pars, info_rbf, _ = optunity.maximize(svm_rbf_tuned_acc, num_evals=20, C=[2, 4], gamma=[0.0001, 0.01], pmap=optunity.pmap)
+
+print()
+print("--- RBF KERNEL ---")
+print("Optimal parameters: " + str(optimal_rbf_pars))
+print("Accuracy of tuned SVM with RBF kernel: %1.3f" % info_rbf.optimum)
+
+df_rbf = optunity.call_log2dataframe(info_rbf.call_log)
+print(df_rbf)
+
+
+svc_best_rbf = sklearn.svm.SVC(kernel='rbf', C=optimal_rbf_pars['C'], gamma=optimal_rbf_pars['gamma'])
+svc_best_rbf.fit(trainFeatures, trainLabels)
+predicted_labels_rbf = svc_best_rbf.predict(testFeatures)
+accuracy_rbf = float(np.sum(np.equal(predicted_labels_rbf, testLabels))/len(testLabels))
+
+print("Accuracy of SVM with RBF kernel and optimal parameter C = {:1.3f} and gamma = {:1.3f} on training set is {:1.3f}".format(optimal_rbf_pars['C'], optimal_rbf_pars['gamma'], accuracy_rbf))
+print()
