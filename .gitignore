@@ -4,3 +4,5 @@
 # everyone keeps his/her own data files
 *.csv
 Exercise_2a/data/*
+
+.Rhistory
