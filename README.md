@@ -1,7 +1,7 @@
 # PatternRecognition_TeamTasks
 
 ### Authors:
-- Livio Baetscher <3
+- Livio Baetscher
 - Carl Balmer
 - Mathias Fuchs
 - Manuela Haefliger
