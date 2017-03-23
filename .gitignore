@@ -1,6 +1,6 @@
-
+# pycharm project
 .idea/
 
-test.csv
-
-train.csv
+# everyone keeps his/her own data files
+*.csv
+Exercise_2a/data/*
