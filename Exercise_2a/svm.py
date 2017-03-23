@@ -15,6 +15,7 @@ Pattern Recognition - Exercise 2a
 import csv
 import numpy as np
 from sklearn import svm
+from sklearn.model_selection import cross_val_score
 
 with open('Exercise_2a/data/train.csv', 'r') as f:
     reader = csv.reader(f)
