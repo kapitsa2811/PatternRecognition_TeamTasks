@@ -16,11 +16,11 @@ import csv
 import numpy as np
 from sklearn import svm
 
-with open('train100.csv', 'r') as f:
+with open('Exercise_2a/data/train.csv', 'r') as f:
     reader = csv.reader(f)
     train = list(reader)
 
-with open('test10.csv', 'r') as f:
+with open('Exercise_2a/data/test.csv', 'r') as f:
     reader = csv.reader(f)
     test = list(reader)
 
@@ -36,18 +36,19 @@ trainFeatures = train[:, 1:]
 testLabels = test[:, 0]
 trainLabels = train[:, 0]
 
-# We no longer need the samples with the labels
+# We no longer need the samples with labels and the objects for import
 del train, test, reader, f
 
 # Example for SVM with linear kernel
 
 linear_svc = svm.SVC(kernel='linear', C=1, gamma=0.002)
 linear_svc.fit(trainFeatures, trainLabels)
-linear_svc.predict(testFeatures)
+predicted_labels_linear = linear_svc.predict(testFeatures)
+accuracy_linear = np.sum(np.equal(predicted_labels_linear, testLabels))/len(testLabels)
 
 # Example for SVM with RBF kernel
 
 rbf_svc = svm.SVC(kernel='rbf', C=1, gamma=0.002)
 rbf_svc.fit(trainFeatures, trainLabels)
-rbf_svc.predict(testFeatures)
-
+predicted_labels_rbf = rbf_svc.predict(testFeatures)
+accuracy_rbf = np.sum(np.equal(predicted_labels_rbf, testLabels))/len(testLabels)
