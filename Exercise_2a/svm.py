@@ -52,10 +52,10 @@ print('>> done preparing data')
 # ---------------------------------------------------------------------------------------------------------------------
 # IF YOU WANT TO USE ONLY PART OF THE DATA
 
-# trainFeatures = trainFeatures[:10000, :]
-# trainLabels = trainLabels[:10000]
-# testFeatures = testFeatures[:1000, :]
-# testLabels = testLabels[:1000]
+# trainFeatures = trainFeatures[:1000, :]
+# trainLabels = trainLabels[:1000]
+# testFeatures = testFeatures[:100, :]
+# testLabels = testLabels[:100]
 
 # ---------------------------------------------------------------------------------------------------------------------
 # LINEAR KERNEL

@@ -31,6 +31,19 @@ by means of cross-validation (5-fold). The script will output the average accura
 investigated kernels and all parameter values (C for linear / C and  &gamma; for RBF). The script will also output
 the accuracy on the whole test set with the optimized parameter values.
 
+### Instructions
+The script can be run in once. For that, the two files `train.csv`and `test.csv`
+have to be in the same folder as the script `svm.py`. Note: the running time is quite
+immense! You might only include a part of the data set by uncomment the lines
+```python
+trainFeatures = trainFeatures[:1000, :]
+trainLabels = trainLabels[:1000]
+testFeatures = testFeatures[:100, :]
+testLabels = testLabels[:100]
+```
+and/or adjust the k-fold by changing the variables `cv_num_lin` and `cv_num_rbf`
+as well as the tested kernel-parameters `params_lin` and `params_rbf`.
+
 ### Results
 
 #### Linear kernel
