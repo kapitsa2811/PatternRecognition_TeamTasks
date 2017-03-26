@@ -9,7 +9,7 @@ Python Version: 3.6
 Pattern Recognition - Exercise 2a
 """
 
-import csv
+import csv, time
 import numpy as np
 import sklearn.svm
 import optunity
@@ -38,12 +38,14 @@ trainLabels = train[:, 0]
 # We no longer need the samples with labels and the objects for import
 del train, test, reader, f
 
+print('done importing')
+
 # ---------------------------------------------------------------------------------------------------------------------
 
-trainFeatures = trainFeatures[:1000, :]
-trainLabels = trainLabels[:1000]
-testFeatures = testFeatures[:20, :]
-testLabels = testLabels[:20]
+# trainFeatures = trainFeatures[:1000, :]
+# trainLabels = trainLabels[:1000]
+# testFeatures = testFeatures[:20, :]
+# testLabels = testLabels[:20]
 
 # ---------------------------------------------------------------------------------------------------------------------
 # linear kernel
@@ -56,24 +58,33 @@ def svm_linear_tuned_acc(x_train, y_train, x_test, y_test, C):
     acc = np.sum(np.equal(y_test, y_pred))/len(y_test)
     return acc
 
-#optimal_linear_pars, info_linear, _ = optunity.maximize(svm_linear_tuned_acc, num_evals=10, C=[0, 5])
-optimal_linear_pars, info_linear, _ = optunity.maximize(svm_linear_tuned_acc, num_evals=20, C=[0, 5], pmap=optunity.pmap)
+start_opt_lin = time.time()
+
+optimal_linear_pars, info_linear, _ = optunity.maximize(svm_linear_tuned_acc, num_evals=10, C=[0, 5])
+#optimal_linear_pars, info_linear, _ = optunity.maximize(svm_linear_tuned_acc, num_evals=20, C=[0, 5], pmap=optunity.pmap)
+
+end_opt_lin = time.time()
 
 print()
 print("--- LINEAR KERNEL ---")
 print("Optimal parameters: " + str(optimal_linear_pars))
 print("Accuracy of tuned SVM with linear kernel: %1.3f" % info_linear.optimum)
+print('Time elapsed: ' + repr(end_opt_lin-start_opt_lin) + ' s')
 
 df_linear = optunity.call_log2dataframe(info_linear.call_log)
 print(df_linear)
 
+start_def_lin = time.time()
 
 svc_best_linear = sklearn.svm.SVC(kernel='linear', C=optimal_linear_pars['C'])
 svc_best_linear.fit(trainFeatures, trainLabels)
 predicted_labels_linear = svc_best_linear.predict(testFeatures)
 accuracy_linear = float(np.sum(np.equal(predicted_labels_linear, testLabels))/len(testLabels))
 
+end_def_lin = time.time()
+
 print("Accuracy of SVM with linear kernel and optimal parameter C = {:1.3f} on training set is {:1.3f}".format(optimal_linear_pars['C'], accuracy_linear))
+print('Time elapsed: ' + repr(end_def_lin-start_def_lin) + ' s')
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -86,22 +97,31 @@ def svm_rbf_tuned_acc(x_train, y_train, x_test, y_test, C, gamma):
     acc = np.sum(np.equal(y_test, y_pred))/len(y_test)
     return acc
 
-# optimal_rbf_pars, info_rbf, _ = optunity.maximize(svm_rbf_tuned_acc, num_evals=10, C=[0, 5], gamma=[0.00001, 0.001])
-optimal_rbf_pars, info_rbf, _ = optunity.maximize(svm_rbf_tuned_acc, num_evals=20, C=[2, 4], gamma=[0.0001, 0.01], pmap=optunity.pmap)
+start_opt_rbf = time.time()
+
+optimal_rbf_pars, info_rbf, _ = optunity.maximize(svm_rbf_tuned_acc, num_evals=10, C=[0, 5], gamma=[0.00001, 0.001])
+#optimal_rbf_pars, info_rbf, _ = optunity.maximize(svm_rbf_tuned_acc, num_evals=20, C=[2, 4], gamma=[0.0001, 0.01], pmap=optunity.pmap)
+
+end_opt_rbf = time.time()
 
 print()
 print("--- RBF KERNEL ---")
 print("Optimal parameters: " + str(optimal_rbf_pars))
 print("Accuracy of tuned SVM with RBF kernel: %1.3f" % info_rbf.optimum)
+print('Time elapsed: ' + repr(end_opt_rbf-start_opt_rbf) + ' s')
 
 df_rbf = optunity.call_log2dataframe(info_rbf.call_log)
 print(df_rbf)
 
+start_def_rbf = time.time()
 
 svc_best_rbf = sklearn.svm.SVC(kernel='rbf', C=optimal_rbf_pars['C'], gamma=optimal_rbf_pars['gamma'])
 svc_best_rbf.fit(trainFeatures, trainLabels)
 predicted_labels_rbf = svc_best_rbf.predict(testFeatures)
 accuracy_rbf = float(np.sum(np.equal(predicted_labels_rbf, testLabels))/len(testLabels))
 
+end_def_rbf = time.time()
+
 print("Accuracy of SVM with RBF kernel and optimal parameter C = {:1.3f} and gamma = {:1.3f} on training set is {:1.3f}".format(optimal_rbf_pars['C'], optimal_rbf_pars['gamma'], accuracy_rbf))
+print('Time elapsed: ' + repr(end_def_rbf-start_def_rbf) + ' s')
 print()
