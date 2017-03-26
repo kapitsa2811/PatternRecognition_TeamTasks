@@ -70,5 +70,17 @@ Mean accuracy for different parameter C and &gamma; during cross validation:
 
 C | &gamma; | accuracy
 --- | --- | ---
+1 | 0.01000 | 0.9662
+1 | 0.00100 | 0.9238
+1 | 0.00010 | 0.8828
+2 | 0.01000 | 0.9711
+2 | 0.00100 | 0.9320
+2 | 0.00010 | 0.8988
+3 | 0.01000 | 0.9731
+3 | 0.00100 | 0.9354
+3 | 0.00010 | 0.9063
+4 | 0.01000 | 0.9736
+4 | 0.00100 | 0.9372
+4 | 0.00010 | 0.9101
 
-Accuracy of SVM with optimal parameter C = and &gamma; = on training set is .
+Accuracy of SVM with optimal parameter C = 4 and &gamma; = 0.01 on training set is 0.9775.
