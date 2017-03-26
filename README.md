@@ -55,7 +55,7 @@ Accuracy of SVM with optimal parameter C = 1 on training set is 0.9306.
 
 Mean accuracy for different parameter C and &gamma; during cross validation:
 
-C | gamma | accuracy
+C | &gamma; | accuracy
 --- | --- | ---
 
 Accuracy of SVM with optimal parameter C = and &gamma; = on training set is .

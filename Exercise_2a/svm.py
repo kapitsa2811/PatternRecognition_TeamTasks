@@ -66,7 +66,7 @@ start_lin = time.time()
 cv_num_lin = 5
 
 # parameters to test in grid search:
-params_lin = {"C": [1, 2, 3, 4, 5]}
+params_lin = {"C": [1, 2, 3, 4, 5, 6, 7, 8, 9]}
 
 print()
 print("---- LINEAR KERNEL ----")
@@ -112,7 +112,7 @@ start_rbf = time.time()
 cv_num_rbf = 5
 
 # parameters to test in grid search:
-params_rbf = {"C": [1, 2, 3], "gamma": [0.01, 0.001, 0.0001]}
+params_rbf = {"C": [1, 2, 3, 4], "gamma": [0.01, 0.001, 0.0001]}
 
 print()
 print("---- RBF KERNEL ----")
