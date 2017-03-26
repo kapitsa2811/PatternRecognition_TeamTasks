@@ -1,9 +1,6 @@
 """
 Team: Over9000
 
-Date created: 20/3/2017
-Date last modified: 23/3/2017
-
 Python Version: 3.6
 
 Pattern Recognition - Exercise 2a
