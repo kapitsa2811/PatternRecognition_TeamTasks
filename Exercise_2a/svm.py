@@ -53,12 +53,12 @@ del train, test, reader, f
 print('>> done preparing data')
 
 # ---------------------------------------------------------------------------------------------------------------------
-# ONLY USE PART OF THE DATA
+# IF YOU WANT TO USE ONLY PART OF THE DATA
 
-trainFeatures = trainFeatures[:10000, :]
-trainLabels = trainLabels[:10000]
-testFeatures = testFeatures[:1000, :]
-testLabels = testLabels[:100]
+# trainFeatures = trainFeatures[:10000, :]
+# trainLabels = trainLabels[:10000]
+# testFeatures = testFeatures[:1000, :]
+# testLabels = testLabels[:1000]
 
 # ---------------------------------------------------------------------------------------------------------------------
 # LINEAR KERNEL
@@ -69,7 +69,7 @@ start_lin = time.time()
 cv_num_lin = 5
 
 # parameters to test in grid search:
-params_lin = {"C": [1, 2, 3, 4, 5, 6, 7, 8, 9]}
+params_lin = {"C": [1, 2, 3, 4, 5]}
 
 print()
 print("---- LINEAR KERNEL ----")
