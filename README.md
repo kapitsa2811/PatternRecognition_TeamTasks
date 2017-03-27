@@ -45,7 +45,7 @@ testFeatures = testFeatures[:100, :]
 testLabels = testLabels[:100]
 ```
 (and maybe adjust the number of samples to include) and/or adjust the k-fold by changing the variables `cv_num_lin` and `cv_num_rbf`
-as well as the tested kernel-parameters `params_lin` and `params_rbf` in `svmGridsearch.py` or `param_C_lin`, `num_params_lin`, `param_C_rbf`
+as well as the tested kernel-parameters `params_lin` and `params_rbf` in `svmGridsearch.py` and `param_C_lin`, `num_params_lin`, `param_C_rbf`
 and `num_params_rbf` in `svmOptunity.py`.
 
 ### Results
@@ -122,3 +122,6 @@ C | gamma | accuracy
 
 Accuracy of SVM with optimal parameter C = 4.734 and gamma = 0.006 on training set is 0.973.
 
+### Conclusion
+
+The RBF kernel performs about 4.7% better than the linear kernel. The parameter C doesn't matter much in the linear kernel. It is best to choose the default parameter C=1. For the RBF kernel, the choice of the parameters is much more crucial. The tests have shown, that C=3 or 4 and &gamma;=0.01 or 0.001 yields the best results.
