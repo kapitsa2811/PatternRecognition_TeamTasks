@@ -111,7 +111,7 @@ Accuracy of SVM with optimal parameter C = 4 and &gamma; = 0.01 on training set 
 
 Mean accuracy for different parameter C and &gamma; during cross validation:
 
-C | gamma | accuracy
+C | &gamma; | accuracy
 --- | --- | ---
 1.234375 | 0.000959 | 0.926479
 2.234375 | 0.005009 | 0.961628
@@ -124,4 +124,4 @@ Accuracy of SVM with optimal parameter C = 4.734 and gamma = 0.006 on training s
 
 ### Conclusion
 
-The RBF kernel performs about 4.7% better than the linear kernel. The parameter C doesn't matter much in the linear kernel. It is best to choose the default parameter C=1. For the RBF kernel, the choice of the parameters is much more crucial. The tests have shown, that C=3 or 4 and &gamma;=0.01 or 0.001 yields the best results.
+The RBF kernel performs about 4.7% better than the linear kernel. The parameter C doesn't matter much in the linear kernel. It is best to choose the default parameter C=1. For the RBF kernel, the choice of the parameters is much more crucial. The tests have shown, that C=3 or 4 and &gamma;=0.01 or 0.001,  or any value in between, yields the best results.
