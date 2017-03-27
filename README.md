@@ -12,7 +12,7 @@ Team tasks of pattern recognition lecture at Univesity of Fribourg.
 ### Language
 - Python 3.6.0
 
-## Exercise 2a
+## Exercise 2a - SVM
 
 ### Packages
 - csv
@@ -49,12 +49,10 @@ as well as the tested kernel-parameters `params_lin` and `params_rbf` in `svmGri
 and `num_params_rbf` in `svmOptunity.py`.
 
 ### Results
-
 From running the scripts with the entire data set (26'999 samples in `train.csv`,
 15'001 samples in `test.csv`).
 
 #### Linear kernel - gridsearch
-
 Mean accuracy for different parameter C during cross validation:
 
 C | accuracy
@@ -72,7 +70,6 @@ C | accuracy
 Accuracy of SVM with optimal parameter C = 1 on training set is 0.9306.
 
 #### Linear kernel - optunity
-
 Mean accuracy for different parameter C during cross validation:
 
 C | accuracy
@@ -87,7 +84,6 @@ C | accuracy
 Accuracy of SVM with optimal parameter C = 4.414 on training set is 0.9080.
 
 #### RBF kernel - gridsearch
-
 Mean accuracy for different parameter C and &gamma; during cross validation:
 
 C | &gamma; | accuracy
@@ -108,7 +104,6 @@ C | &gamma; | accuracy
 Accuracy of SVM with optimal parameter C = 4 and &gamma; = 0.01 on training set is 0.9775.
 
 #### RBF kernel - optunity
-
 Mean accuracy for different parameter C and &gamma; during cross validation:
 
 C | &gamma; | accuracy
@@ -123,5 +118,25 @@ C | &gamma; | accuracy
 Accuracy of SVM with optimal parameter C = 4.734 and gamma = 0.006 on training set is 0.973.
 
 ### Conclusion
-
 The RBF kernel performs about 4.7% better than the linear kernel. The parameter C doesn't matter much in the linear kernel. It is best to choose the default parameter C=1. For the RBF kernel, the choice of the parameters is much more crucial. The tests have shown, that C=3 or 4 and &gamma;=0.01 or 0.001,  or any value in between, yields the best results.
+
+## Exercise 2b - MLP
+
+### Packages
+- csv
+
+### Data
+
+### Description
+The script `mlp.py` trains an MLP with one hidden layer and applies the trained MLP to classify the test set. Cross-validation is done with the following parameters:
+- Optimizing the number of neurons in the hidden layer in the range [10,100]
+- Optimizing the learning rate c in the range [0.1,1]
+- Optimizing the number of training iterations and plotting a graph showing the error-rate on the training set and the validation set, respectively, with respect to the training epochs
+- Performing the random initialization several times and choosing the best network during cross-validation
+The script will output the test accuracy with the best parameters found during cross-validation.
+
+### Instructions
+
+### Results
+
+### Conclusion
