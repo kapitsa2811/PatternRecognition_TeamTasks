@@ -106,6 +106,9 @@ num_rand_init = 10
 # parameters to test in second grid search:
 params2 = {'random_state': np.random.choice(100, size=num_rand_init, replace=False)}
 
+# investigated convergence tolerance:
+tols = [0.1, 0.01, 0.001, 0.0001, 0.00001]
+
 
 # FIRST GRID SEARCH (FOR NUMBER OF NEURONS AND LEARNING RATE):
 # ----------------––------------------------------------------
@@ -136,6 +139,10 @@ for i in range(len(params_gs1)):
     print('{:3.0f} | {:1.1f} | {:1.4f}'.format(params_gs1[i]['hidden_layer_sizes'], params_gs1[i]['learning_rate_init'],
                                                score_gs1[i]))
 print()
+print('nn = number of neurons')
+print('lr = learning rate')
+print('acc = accuracy')
+print()
 print('Time elapsed: ' + repr(end1-start1) + ' s')
 print()
 
@@ -147,61 +154,105 @@ best_learn_rate = gs_mlp1.best_params_['learning_rate_init']
 # OPTIMIZE NUMBER OF TRAINING ITERATIONS AND PLOTTING:
 # ----------------––----------------------------------
 
-# TODO: Optimize number of training iterations (max_iter) and plot a graph showing the error on the training set and the validation set, respectively, with respect to the training epochs.
-best_num_it = 200  # place holder, this should be calculated here.
-# note: for this part, the convergence criteria (tol) should be set very low (e.g. 0.0000001) so that the learning stops
-# due to max_iter and not due to tol. also include the "ignore warnings" part from the simple example above, or else
-# a warning will be shown any time the learning stops due to max_iter.
-# for plotting: see last line in the simple example above.
+# to access the attribute loss_curve, we need to perform the cross validation by hand:
 
-# Suggestion: since controlling the convergence with the tolerance works better as with number of iteration,
-# we should just plot the loss function several times and check after how many iterations we reach convergence...
+# part the indices of the training set into predefined number of sets:
+idx = np.array(np.array_split(np.random.permutation(np.arange(len(trainLabels), dtype=int)), cv_num))
+
+fig, axes = plt.subplots(1, cv_num)
+
+start2 = time.time()
+
+for t in range(len(tols)):
+
+    acc = list()
+    num_iter = list()
+    loss = list()
+
+    axes[t].set_title('tol = ' + repr(tols[t]))
+    axes[t].set_xlabel('number of iterations')
+    axes[t].set_ylabel('loss')
+
+    for i in range(cv_num):
+        x_train = trainFeatures[np.concatenate((np.delete(idx, i, 0))), :]
+        y_train = trainLabels[np.concatenate((np.delete(idx, i, 0)))]
+        x_test = trainFeatures[idx[i], :]
+        y_test = trainLabels[idx[i]]
+        mlp2 = MLPClassifier(hidden_layer_sizes=best_num_neur, activation='relu', solver='sgd', learning_rate='constant',
+                             max_iter=200, tol=tols[t], learning_rate_init=best_learn_rate, verbose=False)
+        mlp2.fit(x_train, y_train)
+        y_pred = mlp2.predict(x_test)
+        acc.append(metrics.accuracy_score(y_pred, y_test))
+        num_iter.append(mlp2.n_iter_)
+        loss.append(mlp2.loss_)
+        axes[t].plot(mlp2.loss_curve_)
+
+    # output tested parameters and scores
+    print('tolerance = ' + repr(tols[t]))
+    print()
+    print(' ni | loss   | acc')
+    print('---------------------')
+    for i in range(cv_num):
+        print('{:3.0f} | {:1.4f} | {:1.4f}'.format(num_iter[i], loss[i], acc[i]))
+
+    print()
+
+end2 = time.time()
+
+print('ni = number of iterations')
+print('acc = accuracy')
+print()
+print('Time elapsed: ' + repr(end2-start2) + ' s')
+print()
 
 
 # SECOND GRID SEARCH (FOR NEURON WEIGHTS DUE TO DIFFERENT RANDOM INITIALIZATIONS):
 # ----------------––--------------------------------------------------------------
 
 # the classifier
-mlp2 = MLPClassifier(hidden_layer_sizes=best_num_neur, activation='relu', solver='sgd', learning_rate='constant',
-                     max_iter=best_num_it, tol=0.0001, learning_rate_init=best_learn_rate, verbose=False)
+mlp3 = MLPClassifier(hidden_layer_sizes=best_num_neur, activation='relu', solver='sgd', learning_rate='constant',
+                     max_iter=200, tol=0.0001, learning_rate_init=best_learn_rate, verbose=False)
 
-start2 = time.time()
+start3 = time.time()
 
 # grid search
-gs_mlp2 = GridSearchCV(mlp2, param_grid=params2, scoring='accuracy', n_jobs=-1, cv=cv_num, refit=True)
-gs_mlp2.fit(trainFeatures, trainLabels)
+gs_mlp3 = GridSearchCV(mlp3, param_grid=params2, scoring='accuracy', n_jobs=-1, cv=cv_num, refit=True)
+gs_mlp3.fit(trainFeatures, trainLabels)
 # note: in the end, the mlp is refit with the best estimator and the entire data set, so that prediction of the
 # test set is directly possible
 
-end2 = time.time()
+end3 = time.time()
 
 # read tested parameter combinations and their scores
-params_gs2 = gs_mlp2.cv_results_['params']
-score_gs2 = gs_mlp2.cv_results_['mean_test_score']
+params_gs3 = gs_mlp3.cv_results_['params']
+score_gs3 = gs_mlp3.cv_results_['mean_test_score']
 
 # output tested parameters and scores
 print(' rs | acc')
-print('------------------')
-for i in range(len(params_gs2)):
-    print('{:3.0f} | {:1.4f}'.format(params_gs2[i]['random_state'], score_gs2[i]))
+print('------------')
+for i in range(len(params_gs3)):
+    print('{:3.0f} | {:1.4f}'.format(params_gs3[i]['random_state'], score_gs3[i]))
 print()
-print('Time elapsed: ' + repr(end2-start2) + ' s')
+print('rs = random state')
+print('acc = accuracy')
+print()
+print('Time elapsed: ' + repr(end3-start3) + ' s')
 print()
 
 
 # PREDICT LABELS FOR TEST SET AND COMPUTE ACCURACY:
 # -------------------------------------------------
 
-start3 = time.time()
+start4 = time.time()
 
-pred_labels = gs_mlp2.predict(testFeatures)
+pred_labels = gs_mlp3.predict(testFeatures)
 tot_accuracy = metrics.accuracy_score(pred_labels, testLabels)
 
-end3 = time.time()
+end4 = time.time()
 
 print("Accuracy of MLP with optimal number of neurons = {:1.0f} and optimal learning rate = {:1.1f} on training "
       "set is {:1.4f}".format(best_num_neur, best_learn_rate, tot_accuracy))
-print('Time elapsed: ' + repr(end3-start3) + ' s')
+print('Time elapsed: ' + repr(end4-start4) + ' s')
 print()
 
 

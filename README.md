@@ -35,7 +35,7 @@ investigated kernels and all parameter values (C for linear / C and  &gamma; for
 the accuracy on the whole test set with the optimized parameter values.
 
 ### Instructions
-The scripts can be run in once. For that, the two files `train.csv`and `test.csv`
+The scripts can be run in once. For that, the two files `train.csv`and `test.csv` (located in the folder `Exercise_2a`)
 have to be in the same folder as the scripts `svm*.py`. Note: the running time is quite
 immense for the entire data set! You might only include a part of the data set by uncommenting the lines
 ```python
@@ -124,19 +124,70 @@ The RBF kernel performs about 4.7% better than the linear kernel. The parameter 
 
 ### Packages
 - csv
+- time
+- numpy 1.12.0
+- scikit-learn 0.18.1
+
 
 ### Data
+- train.csv
+- test.csv
 
 ### Description
-The script `mlp.py` trains an MLP with one hidden layer and applies the trained MLP to classify the test set. Cross-validation is done with the following parameters:
-- Optimizing the number of neurons in the hidden layer in the range [10,100]
-- Optimizing the learning rate c in the range [0.1,1]
-- Optimizing the number of training iterations and plotting a graph showing the error-rate on the training set and the validation set, respectively, with respect to the training epochs
-- Performing the random initialization several times and choosing the best network during cross-validation
-The script will output the test accuracy with the best parameters found during cross-validation.
+The script `mlp.py` trains an MLP with one hidden layer from the training set `train.csv` and applies the trained MLP to classify the test set `test.csv.
+
+Before doing so, a first cross-validation (5-fold) is done for the parameters:
+- number of neurons in the hidden layer (in the range [10, 100] with step size 10)
+- learning rate used in stochastic gradient descent (in the range [0.1, 1] with step size 0.1)
+
+In a second step, the number of training iterations (combined with the convergence tolerance) are investigated and optimized during cross-validation and training.
+For that, a graph showing the loss on the training set and the validation set with respect to the training epochs is plotted.
+
+In a third step, another cross-validation is performed for testing several different random initializations for the neuron weights and the best one is then chosen.
+
+The script will output the results of the three steps as well as the total accuracy on the test set with the best parameters found during the above mentioned steps.
 
 ### Instructions
+As in exercise 2a, the script, here `mlp.py`, located in the folder `Exercise_2b`, can be run at once. Several adjustments can be don in the settings part of the script.
 
 ### Results
+The full output of the script (run with the entire data set) can be found in the file `Exercise_2b\output.txt`.
+
+The top ten parameter combinations regarding accuracy during cross-validation are:
+
+number of neurons | learning rate | accuracy
+--- | --- | ---
+ 90 | 0.2 | 0.9698
+100 | 0.2 | 0.9698
+100 | 0.1 | 0.9685
+ 90 | 0.1 | 0.9684
+ 90 | 0.3 | 0.9681
+ 80 | 0.1 | 0.9677
+ 80 | 0.2 | 0.9676
+ 90 | 0.4 | 0.9651
+100 | 0.3 | 0.9643
+100 | 0.4 | 0.9643
+
+Initializing the weights several times randomly yields to the following accuracy values:
+
+random state | accuracy
+---- | ----
+ 10 | 0.9633
+ 39 | 0.9665
+ 71 | 0.9692
+  3 | 0.9694
+ 99 | 0.9676
+ 35 | 0.9701
+ 82 | 0.9680
+ 64 | 0.9692
+ 31 | 0.9550
+ 12 | 0.9709
+
+hence an improvement of about 1.6% can be observed.
+
+The total accuracy of the MLP with the optimal number of neurons = 100, the optimal learning rate = 0.2 and the best performing random inital state on the entire training set is 0.9741.
+
 
 ### Conclusion
+MLPs are much faster than SVMs. Running the whole script can be done in less than an hour although many more MLPs are trained than in Exercise 2a. Regarding accuracy is MLP slightly better than SVM.
+Increasing the number of neurons doesn't increase the running time notably, but increasing the learning rate does slightly.
