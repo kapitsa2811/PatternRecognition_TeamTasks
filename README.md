@@ -134,13 +134,13 @@ The RBF kernel performs about 4.7% better than the linear kernel. The parameter 
 - test.csv
 
 ### Description
-The script `mlp.py` trains an MLP with one hidden layer from the training set `train.csv` and applies the trained MLP to classify the test set `test.csv.
+The script `mlp.py` trains an MLP with one hidden layer from the training set `train.csv` and applies the trained MLP to classify the test set `test.csv`.
 
-Before doing so, a first cross-validation (5-fold) is done for the parameters:
+Before doing so, a first cross-validation (5-fold) is done for the parameters
 - number of neurons in the hidden layer (in the range [10, 100] with step size 10)
 - learning rate used in stochastic gradient descent (in the range [0.1, 1] with step size 0.1)
 
-In a second step, the number of training iterations (combined with the convergence tolerance) are investigated and optimized during cross-validation (5-fold) and training.
+In a second step, the number of training iterations (combined with the convergence tolerance) are investigated and optimized during cross-validation (5-fold).
 For that, a graph showing the loss on the training set and the validation sets with respect to the training epochs is plotted.
 
 In a third step, another cross-validation (5-fold) is performed for testing several different random initializations for the neuron weights.
@@ -148,13 +148,12 @@ In a third step, another cross-validation (5-fold) is performed for testing seve
 The script will output the results of the three steps as well as the total accuracy on the test set with the best parameters found during the above mentioned steps.
 
 ### Instructions
-As in exercise 2a, the script, here `mlp.py`, located in the folder `Exercise_2b`, can be run at once. Several adjustments can be don in the settings part of the script.
+As in exercise 2a, the script, here `mlp.py`, located in the folder `Exercise_2b`, can be run at once. Several adjustments can be done in the settings part of the script.
 
 ### Results
 The full output of the script (run with the entire data set) can be found in the file `Exercise_2b\output.txt`.
 
 #### First cross-validation (for number of neurons and learning rate)
-
 The top ten parameter combinations regarding accuracy during the first cross-validation are:
 
 number of neurons | learning rate | accuracy
@@ -173,12 +172,17 @@ number of neurons | learning rate | accuracy
 So, the best choice is 100 neurons and a learning rate of 0.2.
 
 #### Second cross-validation (for tolerance)
+The loss function vs training epoche for the investigated tolerance values during cross validation adn training:
 
 ![alt text](https://github.com/nela3003/PatternRecognition_TeamTasks/blob/master/Exercise_2b/plot_tolerance.png "Loss Function")
 
+From the plots, it can be observed that a tolerance of 0.0001 and 0.00001 doesn't help much to decrease the loss, since already after 15
+iterations the gain of further training is negligible. A choice of 0.1 or 0.01 for the tolerance is maybe to optimistic, since there could still be some improvement done.
+So, a choice of 0.001 for the tolerance as convergence criteria makes sense.
+
 #### Third cross-validation (for neuron weights due to different random initialization)
 
-Initializing randomly the weights several times yields to the following accuracy values:
+Randomly initializing the weights several times yields to the following accuracy values:
 
 random state | accuracy
 ---- | ----
