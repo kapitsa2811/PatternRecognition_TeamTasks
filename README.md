@@ -177,16 +177,16 @@ Notes on how convergence in the `MLPClassifier` works:
 a tolerance value `tol` can be set as parameter:
 
 > **tol** : float, optional, default 1e-4
-
+>
 > Tolerance for the optimization. When the loss or score is not improving by at least tol for two consecutive iterations, unless learning_rate is set to ‘adaptive’, convergence is considered to be reached and training stops.
 
 as well as the maximum value of iterations `max_iter`:
 
 > **max_iter** : int, optional, default 200
-
+>
 > Maximum number of iterations. The solver iterates until convergence (determined by ‘tol’) or this number of iterations.
 
-During working with the `MLPClassifier`, handling the tolerance value turned out to be more effective than trying to control the number of iterations.
+While working with the `MLPClassifier`, handling the tolerance value turned out to be more effective than trying to control the number of iterations.
 
 So, the following plots show the loss function vs training epochs for the investigated tolerance values during cross validation and training:
 
