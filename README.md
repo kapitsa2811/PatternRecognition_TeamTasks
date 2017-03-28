@@ -172,11 +172,27 @@ number of neurons | learning rate | accuracy
 So, the best choice is 100 neurons and a learning rate of 0.2.
 
 #### Second cross-validation (for tolerance)
-The loss function vs training epoche for the investigated tolerance values during cross validation adn training:
+Notes on how convergence in the `MLPClassifier` works:
+
+a tolerance value `tol` can be set as parameter:
+
+> **tol** : float, optional, default 1e-4
+
+> Tolerance for the optimization. When the loss or score is not improving by at least tol for two consecutive iterations, unless learning_rate is set to ‘adaptive’, convergence is considered to be reached and training stops.
+
+as well as the maximum value of iterations `max_iter`:
+
+> **max_iter** : int, optional, default 200
+
+> Maximum number of iterations. The solver iterates until convergence (determined by ‘tol’) or this number of iterations.
+
+During working with the `MLPClassifier`, handling the tolerance value turned out to be more effective than trying to control the number of iterations.
+
+So, the following plots show the loss function vs training epochs for the investigated tolerance values during cross validation and training:
 
 ![alt text](https://github.com/nela3003/PatternRecognition_TeamTasks/blob/master/Exercise_2b/plot_tolerance.png "Loss Function")
 
-From the plots, it can be observed that a tolerance of 0.0001 and 0.00001 doesn't help much to decrease the loss, since already after 15
+From the plots, it can be observed that a tolerance of 0.0001 and 0.00001 doesn't help much in decreasing the loss, since already after 15
 iterations the gain of further training is negligible. A choice of 0.1 or 0.01 for the tolerance is maybe to optimistic, since there could still be some improvement done.
 So, a choice of 0.001 for the tolerance as convergence criteria makes sense.
 
