@@ -158,18 +158,18 @@ The top ten parameter combinations regarding accuracy during the first cross-val
 
 number of neurons | learning rate | accuracy
 --- | --- | ---
-100 | 0.2 | 0.9698
- 90 | 0.2 | 0.9698
-100 | 0.1 | 0.9685
- 90 | 0.1 | 0.9684
- 90 | 0.3 | 0.9681
- 80 | 0.1 | 0.9677
- 80 | 0.2 | 0.9676
- 90 | 0.4 | 0.9651
-100 | 0.3 | 0.9643
-100 | 0.4 | 0.9643
+100 | 0.1 | 0.9691
+ 90 | 0.1 | 0.9683
+100 | 0.3 | 0.9659
+ 80 | 0.1 | 0.9651
+ 60 | 0.1 | 0.9644
+ 70 | 0.1 | 0.9644
+ 50 | 0.2 | 0.9643
+100 | 0.2 | 0.9618
+ 50 | 0.1 | 0.9584
+ 70 | 0.2 | 0.9577
 
-So, the best choice is 100 neurons and a learning rate of 0.2.
+So, the best choice is 100 neurons and a learning rate of 0.1.
 
 #### Second cross-validation (for tolerance)
 Notes on how convergence in the `MLPClassifier` works:
@@ -194,7 +194,9 @@ So, the following plots show the loss function vs training epochs for the invest
 
 From the plots, it can be observed that a tolerance of 0.0001 and 0.00001 doesn't help much in decreasing the loss, since already after 15
 iterations the gain of further training is negligible. A choice of 0.1 or 0.01 for the tolerance is maybe to optimistic, since there could still be some improvement done.
-So, a choice of 0.001 for the tolerance as convergence criteria makes sense.
+So, a choice of 0.001 for the tolerance as convergence criteria makes sense. Since the computational time is not critical and the learning only improves,
+the script will choose the tolerance which performs best regarding mean accuracy (mean of accuracy from cross-validation and test set).
+
 
 #### Third cross-validation (for neuron weights due to different random initialization)
 
@@ -202,27 +204,27 @@ Randomly initializing the weights several times yields to the following accuracy
 
 random state | accuracy
 ---- | ----
-  6 | 0.9670
- 39 | 0.9657
- 97 | 0.9665
- 78 | 0.9685
- 56 | 0.9303
- 10 | 0.9629
- 62 | 0.9654
- 40 | 0.9257
- 96 | 0.9704
- 74 | 0.9686
+ 10 | 0.9577
+ 74 | 0.9680
+ 50 | 0.9638
+ 31 | 0.9631
+ 68 | 0.9625
+ 90 | 0.9616
+ 38 | 0.9660
+ 30 | 0.9667
+ 26 | 0.9682
+ 92 | 0.9685
 
-hence an improvement of about 4% can be observed.
+hence an improvement of about 1.1% can be observed.
 
 #### Predict labels for test set and compute accuracy
 Accuracy of MLP on the entire training set with
   - optimal number of neurons = 100
-  - optimal learning rate = 0.2
-  - optimal tolerance = 0.001
+  - optimal learning rate = 0.1
+  - optimal tolerance = 0.00001
   - best performing randomly initialized weights
 
-is 0.9716.
+is 0.9730.
 
 ### Conclusion
 MLPs are much faster than SVMs. Running the whole script can be done in about half an hour although many more MLPs are trained than in Exercise 2a. Regarding accuracy is MLP in the same range as SVM.

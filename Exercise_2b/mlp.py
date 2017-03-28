@@ -115,7 +115,7 @@ print('FIRST CROSS-VALIDATION (FOR NUMBER OF NEURONS AND LEARNING RATE)')
 print('----------------------------------------------------------------')
 
 # the classifier
-mlp1 = MLPClassifier(activation='relu', solver='sgd', learning_rate='constant', max_iter=200, random_state=42,
+mlp1 = MLPClassifier(activation='relu', solver='sgd', learning_rate='constant', max_iter=200,
                      tol=0.0001, verbose=False)
 
 start1 = time.time()
@@ -167,69 +167,6 @@ print()
 
 # part the indices of the training set into predefined number of sets:
 idx = np.array(np.array_split(np.random.permutation(np.arange(len(trainLabels), dtype=int)), cv_num))
-
-fig, axes = plt.subplots(1, cv_num)
-
-start2 = time.time()
-
-acc_tol = list()
-
-for t in range(len(tols)):
-
-    acc = list()
-    num_iter = list()
-    loss = list()
-
-    axes[t].set_title('tol = ' + repr(tols[t]))
-    axes[t].set_xlabel('number of iterations')
-    axes[t].set_ylabel('loss')
-
-    for i in range(cv_num):
-        x_train = trainFeatures[np.concatenate((np.delete(idx, i, 0))), :]
-        y_train = trainLabels[np.concatenate((np.delete(idx, i, 0)))]
-        x_test = trainFeatures[idx[i], :]
-        y_test = trainLabels[idx[i]]
-        mlp2 = MLPClassifier(hidden_layer_sizes=best_num_neur, activation='relu', solver='sgd', learning_rate='constant',
-                             max_iter=200, tol=tols[t], learning_rate_init=best_learn_rate, verbose=False)
-        mlp2.fit(x_train, y_train)
-        y_pred = mlp2.predict(x_test)
-        acc.append(metrics.accuracy_score(y_pred, y_test))
-        num_iter.append(mlp2.n_iter_)
-        loss.append(mlp2.loss_)
-        axes[t].plot(mlp2.loss_curve_, label='cv | n_iter = ' + repr(mlp2.n_iter_))
-
-    # do training with entire training set
-    mlp2.fit(trainFeatures, trainLabels)
-    # predict entire test set
-    pred_labels2 = mlp2.predict(testFeatures)
-    acc_tol.append(metrics.accuracy_score(pred_labels2, testLabels))
-    axes[t].plot(mlp2.loss_curve_, label='train | n_iter = ' + repr(mlp2.n_iter_))
-    axes[t].legend()
-
-    # output tested parameters and scores
-    print('tolerance = ' + repr(tols[t]))
-    print('------------------')
-    print()
-    print(' ni | loss   | acc')
-    print('---------------------')
-    for i in range(cv_num):
-        print('{:3.0f} | {:.4f} | {:.4f}'.format(num_iter[i], loss[i], acc[i]))
-
-    print()
-    print('Training on entire training set needed {:d} iterations, ended with loss {:.4f} '
-          'and achieved accuracy {:.4f}.'.format(mlp2.n_iter_, mlp2.loss_, acc_tol[t]))
-    print()
-
-end2 = time.time()
-
-best_tol = tols[np.argmax(acc_tol)]
-
-print('ni = number of iterations')
-print('acc = accuracy')
-print()
-print('Best performing tolerance is ' + repr(best_tol) + ' with accuracy {:.4f}.'.format(max(acc_tol)))
-print()
-print('Time elapsed: {:.3f} s'.format(end2-start2))
 
 
 # THIRD CROSS-VALIDATION (FOR NEURON WEIGHTS DUE TO DIFFERENT RANDOM INITIALIZATIONS):
