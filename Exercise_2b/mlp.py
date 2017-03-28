@@ -12,8 +12,6 @@ from sklearn.neural_network import MLPClassifier
 from sklearn import metrics
 from sklearn.model_selection import GridSearchCV
 import matplotlib.pyplot as plt
-from sklearn.exceptions import ConvergenceWarning
-from sklearn.utils.testing import ignore_warnings
 
 # ---------------------------------------------------------------------------------------------------------------------
 # DATA PREPARATION
@@ -55,10 +53,10 @@ print('>> done preparing data')
 # ---------------------------------------------------------------------------------------------------------------------
 # IF YOU WANT TO USE ONLY PART OF THE DATA
 
-# trainFeatures = trainFeatures[:100, :]
-# trainLabels = trainLabels[:100]
-# testFeatures = testFeatures[:10, :]
-# testLabels = testLabels[:10]
+trainFeatures = trainFeatures[:100, :]
+trainLabels = trainLabels[:100]
+testFeatures = testFeatures[:10, :]
+testLabels = testLabels[:10]
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -71,8 +69,7 @@ print('>> done preparing data')
 # mlp_simple = MLPClassifier(hidden_layer_sizes=100, activation='relu', solver='sgd', learning_rate='constant',
 #                            max_iter=200, tol=0.0001, learning_rate_init=0.1, verbose=False)
 # # train the classifier
-# with ignore_warnings(category=ConvergenceWarning):
-#     mlp_simple.fit(trainFeatures, trainLabels)
+# mlp_simple.fit(trainFeatures, trainLabels)
 # # predict labels for test set
 # pred_labels_simple = mlp_simple.predict(testFeatures)
 # # compute accuracy
@@ -113,6 +110,10 @@ tols = [0.1, 0.01, 0.001, 0.0001, 0.00001]
 # FIRST GRID SEARCH (FOR NUMBER OF NEURONS AND LEARNING RATE):
 # ----------------––------------------------------------------
 
+print()
+print('FIRST GRID SEARCH (FOR NUMBER OF NEURONS AND LEARNING RATE)')
+print('----------------------------------------------------------')
+
 # the classifier
 mlp1 = MLPClassifier(activation='relu', solver='sgd', learning_rate='constant', max_iter=200, random_state=42,
                      tol=0.0001, verbose=False)
@@ -151,8 +152,12 @@ best_num_neur = gs_mlp1.best_params_['hidden_layer_sizes']
 best_learn_rate = gs_mlp1.best_params_['learning_rate_init']
 
 
-# OPTIMIZE NUMBER OF TRAINING ITERATIONS AND PLOTTING:
-# ----------------––----------------------------------
+# OPTIMIZE NUMBER OF TRAINING ITERATIONS / TOLERANCE:
+# ----------------––---------------------------------
+
+print()
+print('OPTIMIZE NUMBER OF TRAINING ITERATIONS / TOLERANCE')
+print('----------------------------------------------------------')
 
 # to access the attribute loss_curve, we need to perform the cross validation by hand:
 
@@ -211,6 +216,8 @@ for t in range(len(tols)):
 
 end2 = time.time()
 
+axes.show()
+
 print('ni = number of iterations')
 print('acc = accuracy')
 print()
@@ -220,6 +227,10 @@ print()
 
 # SECOND GRID SEARCH (FOR NEURON WEIGHTS DUE TO DIFFERENT RANDOM INITIALIZATIONS):
 # ----------------––--------------------------------------------------------------
+
+print()
+print('SECOND GRID SEARCH (FOR NEURON WEIGHTS DUE TO DIFFERENT RANDOM INITIALIZATIONS)')
+print('-------------------------------------------------------------------------------')
 
 # the classifier
 mlp3 = MLPClassifier(hidden_layer_sizes=best_num_neur, activation='relu', solver='sgd', learning_rate='constant',
@@ -254,6 +265,10 @@ print()
 
 # PREDICT LABELS FOR TEST SET AND COMPUTE ACCURACY:
 # -------------------------------------------------
+
+print()
+print('PREDICT LABELS FOR TEST SET AND COMPUTE ACCURACY')
+print('------------------------------------------------')
 
 start4 = time.time()
 
