@@ -53,10 +53,10 @@ print('>> done preparing data')
 # ---------------------------------------------------------------------------------------------------------------------
 # IF YOU WANT TO USE ONLY PART OF THE DATA
 
-trainFeatures = trainFeatures[:100, :]
-trainLabels = trainLabels[:100]
-testFeatures = testFeatures[:10, :]
-testLabels = testLabels[:10]
+# trainFeatures = trainFeatures[:100, :]
+# trainLabels = trainLabels[:100]
+# testFeatures = testFeatures[:10, :]
+# testLabels = testLabels[:10]
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -95,7 +95,7 @@ testLabels = testLabels[:10]
 cv_num = 5  # this will be used for all cross validations performed
 
 # parameters to test in first grid search:
-params1 = {"hidden_layer_sizes": np.linspace(10, 100, 10, dtype=int), 'learning_rate_init': np.linspace(0.1, 1, 10)}
+params1 = {'hidden_layer_sizes': np.linspace(10, 100, 10, dtype=int), 'learning_rate_init': np.linspace(0.1, 1, 10)}
 
 # number of times the random initialization should be done:
 num_rand_init = 10
@@ -107,12 +107,12 @@ params2 = {'random_state': np.random.choice(100, size=num_rand_init, replace=Fal
 tols = [0.1, 0.01, 0.001, 0.0001, 0.00001]
 
 
-# FIRST GRID SEARCH (FOR NUMBER OF NEURONS AND LEARNING RATE):
-# ----------------––------------------------------------------
+# FIRST CROSS-VALIDATION (FOR NUMBER OF NEURONS AND LEARNING RATE):
+# ----------------––-----------------------------------------------
 
 print()
-print('FIRST GRID SEARCH (FOR NUMBER OF NEURONS AND LEARNING RATE)')
-print('----------------------------------------------------------')
+print('FIRST CROSS-VALIDATION (FOR NUMBER OF NEURONS AND LEARNING RATE)')
+print('----------------------------------------------------------------')
 
 # the classifier
 mlp1 = MLPClassifier(activation='relu', solver='sgd', learning_rate='constant', max_iter=200, random_state=42,
@@ -132,32 +132,36 @@ end1 = time.time()
 params_gs1 = gs_mlp1.cv_results_['params']
 score_gs1 = gs_mlp1.cv_results_['mean_test_score']
 
+# read best parameters
+best_num_neur = gs_mlp1.best_params_['hidden_layer_sizes']
+best_learn_rate = gs_mlp1.best_params_['learning_rate_init']
+
 # output tested parameters and scores
 print()
 print(' nn | lr  | acc')
 print('------------------')
 for i in range(len(params_gs1)):
-    print('{:3.0f} | {:1.1f} | {:1.4f}'.format(params_gs1[i]['hidden_layer_sizes'], params_gs1[i]['learning_rate_init'],
+    print('{:3.0f} | {:.1f} | {:.4f}'.format(params_gs1[i]['hidden_layer_sizes'], params_gs1[i]['learning_rate_init'],
                                                score_gs1[i]))
 print()
 print('nn = number of neurons')
 print('lr = learning rate')
 print('acc = accuracy')
 print()
-print('Time elapsed: ' + repr(end1-start1) + ' s')
+print('Best parameter combination:')
+print('number of hidden layers = ' + repr(best_num_neur))
+print('learning rate = {:.1f}'.format(best_learn_rate))
 print()
-
-# read best parameters
-best_num_neur = gs_mlp1.best_params_['hidden_layer_sizes']
-best_learn_rate = gs_mlp1.best_params_['learning_rate_init']
+print('Time elapsed: {:.3f} s'.format(end1-start1))
 
 
-# OPTIMIZE NUMBER OF TRAINING ITERATIONS / TOLERANCE:
-# ----------------––---------------------------------
+# SECOND CROSS-VALIDATION (FOR TOLERANCE):
+# ----------------––----------------------
 
 print()
-print('OPTIMIZE NUMBER OF TRAINING ITERATIONS / TOLERANCE')
-print('----------------------------------------------------------')
+print('SECOND CROSS-VALIDATION (FOR TOLERANCE)')
+print('---------------------------------------')
+print()
 
 # to access the attribute loss_curve, we need to perform the cross validation by hand:
 
@@ -167,6 +171,8 @@ idx = np.array(np.array_split(np.random.permutation(np.arange(len(trainLabels), 
 fig, axes = plt.subplots(1, cv_num)
 
 start2 = time.time()
+
+acc_tol = list()
 
 for t in range(len(tols)):
 
@@ -190,14 +196,14 @@ for t in range(len(tols)):
         acc.append(metrics.accuracy_score(y_pred, y_test))
         num_iter.append(mlp2.n_iter_)
         loss.append(mlp2.loss_)
-        axes[t].plot(mlp2.loss_curve_, label="cv | n_iter = "+repr(mlp2.n_iter_))
+        axes[t].plot(mlp2.loss_curve_, label='cv | n_iter = ' + repr(mlp2.n_iter_))
 
     # do training with entire training set
     mlp2.fit(trainFeatures, trainLabels)
     # predict entire test set
     pred_labels2 = mlp2.predict(testFeatures)
-    acc2 = metrics.accuracy_score(pred_labels2, testLabels)
-    axes[t].plot(mlp2.loss_curve_, label="train | n_iter = "+repr(mlp2.n_iter_))
+    acc_tol.append(metrics.accuracy_score(pred_labels2, testLabels))
+    axes[t].plot(mlp2.loss_curve_, label='train | n_iter = ' + repr(mlp2.n_iter_))
     axes[t].legend()
 
     # output tested parameters and scores
@@ -207,34 +213,36 @@ for t in range(len(tols)):
     print(' ni | loss   | acc')
     print('---------------------')
     for i in range(cv_num):
-        print('{:3.0f} | {:1.4f} | {:1.4f}'.format(num_iter[i], loss[i], acc[i]))
+        print('{:3.0f} | {:.4f} | {:.4f}'.format(num_iter[i], loss[i], acc[i]))
 
     print()
-    print('Training on entire training set needed {:3.0f} iterations, ended with loss {:1.4f} and achieved '
-          'accuracy {:1.4f}.'.format(mlp2.n_iter_, mlp2.loss_, acc2))
+    print('Training on entire training set needed {:d} iterations, ended with loss {:.4f} '
+          'and achieved accuracy {:.4f}.'.format(mlp2.n_iter_, mlp2.loss_, acc_tol[t]))
     print()
 
 end2 = time.time()
 
-axes.show()
+best_tol = tols[np.argmax(acc_tol)]
 
 print('ni = number of iterations')
 print('acc = accuracy')
 print()
-print('Time elapsed: ' + repr(end2-start2) + ' s')
+print('Best performing tolerance is ' + repr(best_tol) + ' with accuracy {:.4f}.'.format(max(acc_tol)))
 print()
+print('Time elapsed: {:.3f} s'.format(end2-start2))
 
 
-# SECOND GRID SEARCH (FOR NEURON WEIGHTS DUE TO DIFFERENT RANDOM INITIALIZATIONS):
-# ----------------––--------------------------------------------------------------
+# THIRD CROSS-VALIDATION (FOR NEURON WEIGHTS DUE TO DIFFERENT RANDOM INITIALIZATIONS):
+# ----------------––------------------------------------------------------------------
 
 print()
-print('SECOND GRID SEARCH (FOR NEURON WEIGHTS DUE TO DIFFERENT RANDOM INITIALIZATIONS)')
-print('-------------------------------------------------------------------------------')
+print('THIRD CROSS-VALIDATION (FOR NEURON WEIGHTS DUE TO DIFFERENT RANDOM INITIALIZATIONS)')
+print('-----------------------------------------------------------------------------------')
+print()
 
 # the classifier
 mlp3 = MLPClassifier(hidden_layer_sizes=best_num_neur, activation='relu', solver='sgd', learning_rate='constant',
-                     max_iter=200, tol=0.0001, learning_rate_init=best_learn_rate, verbose=False)
+                     max_iter=200, tol=best_tol, learning_rate_init=best_learn_rate, verbose=False)
 
 start3 = time.time()
 
@@ -254,13 +262,12 @@ score_gs3 = gs_mlp3.cv_results_['mean_test_score']
 print(' rs | acc')
 print('------------')
 for i in range(len(params_gs3)):
-    print('{:3.0f} | {:1.4f}'.format(params_gs3[i]['random_state'], score_gs3[i]))
+    print('{:3.0f} | {:.4f}'.format(params_gs3[i]['random_state'], score_gs3[i]))
 print()
 print('rs = random state')
 print('acc = accuracy')
 print()
-print('Time elapsed: ' + repr(end3-start3) + ' s')
-print()
+print('Time elapsed: {:.3f} s'.format(end3-start3))
 
 
 # PREDICT LABELS FOR TEST SET AND COMPUTE ACCURACY:
@@ -269,6 +276,7 @@ print()
 print()
 print('PREDICT LABELS FOR TEST SET AND COMPUTE ACCURACY')
 print('------------------------------------------------')
+print()
 
 start4 = time.time()
 
@@ -277,10 +285,18 @@ tot_accuracy = metrics.accuracy_score(pred_labels, testLabels)
 
 end4 = time.time()
 
-print("Accuracy of MLP with optimal number of neurons = {:1.0f} and optimal learning rate = {:1.1f} on training "
-      "set is {:1.4f}".format(best_num_neur, best_learn_rate, tot_accuracy))
-print('Time elapsed: ' + repr(end4-start4) + ' s')
+print('Accuracy of MLP on the entire training set with')
+print()
+print('  - optimal number of neurons = ' + repr(best_num_neur))
+print('  - optimal learning rate = {:.1f}'.format(best_learn_rate))
+print('  - optimal tolerance = ' + repr(best_tol))
+print('  - best performing randomly initialized weights')
+print()
+print('is {:.4f}'.format(tot_accuracy))
+print('   ======')
+print()
+print('Time elapsed: {:.3f} s.'.format(end4-start4))
 print()
 
-
+plt.show()
 
