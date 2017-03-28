@@ -140,10 +140,10 @@ Before doing so, a first cross-validation (5-fold) is done for the parameters:
 - number of neurons in the hidden layer (in the range [10, 100] with step size 10)
 - learning rate used in stochastic gradient descent (in the range [0.1, 1] with step size 0.1)
 
-In a second step, the number of training iterations (combined with the convergence tolerance) are investigated and optimized during cross-validation and training.
-For that, a graph showing the loss on the training set and the validation set with respect to the training epochs is plotted.
+In a second step, the number of training iterations (combined with the convergence tolerance) are investigated and optimized during cross-validation (f-fold) and training.
+For that, a graph showing the loss on the training set and the validation sets with respect to the training epochs is plotted.
 
-In a third step, another cross-validation is performed for testing several different random initializations for the neuron weights and the best one is then chosen.
+In a third step, another cross-validation (5-fold) is performed for testing several different random initializations for the neuron weights.
 
 The script will output the results of the three steps as well as the total accuracy on the test set with the best parameters found during the above mentioned steps.
 
@@ -153,7 +153,7 @@ As in exercise 2a, the script, here `mlp.py`, located in the folder `Exercise_2b
 ### Results
 The full output of the script (run with the entire data set) can be found in the file `Exercise_2b\output.txt`.
 
-The top ten parameter combinations regarding accuracy during cross-validation are:
+The top ten parameter combinations regarding accuracy during the first cross-validation are:
 
 number of neurons | learning rate | accuracy
 --- | --- | ---
@@ -167,6 +167,8 @@ number of neurons | learning rate | accuracy
  90 | 0.4 | 0.9651
 100 | 0.3 | 0.9643
 100 | 0.4 | 0.9643
+
+So, the best choice is 90 neurons and a learning rate of 0.2.
 
 Initializing the weights several times randomly yields to the following accuracy values:
 

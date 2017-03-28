@@ -2,6 +2,9 @@
 >> start data preparation
 >> done preparing data
 
+FIRST CROSS-VALIDATION (FOR NUMBER OF NEURONS AND LEARNING RATE)
+----------------------------------------------------------------
+ 
  nn | lr  | acc
 ------------------
  10 | 0.1 | 0.8737
@@ -105,22 +108,125 @@
 100 | 0.9 | 0.3243
 100 | 1.0 | 0.2435
 
-Time elapsed: 1365.170287847519 s
+nn = number of neurons
+lr = learning rate
+acc = accuracy
+
+Best parameter combination:
+number of hidden layers = 100
+learning rate = 0.2
+
+Time elapsed: 1350.399 s
+
+SECOND CROSS-VALIDATION (FOR TOLERANCE)
+---------------------------------------
+
+tolerance = 0.1
+------------------
+
+ ni | loss   | acc
+---------------------
+  5 | 0.0543 | 0.9576
+  5 | 0.0558 | 0.9628
+  5 | 0.0536 | 0.9593
+  5 | 0.0585 | 0.9683
+  5 | 0.0548 | 0.9696
+
+Training on entire training set needed 5 iterations, ended with loss 0.0539 and achieved accuracy 0.9644.
+
+tolerance = 0.01
+------------------
+
+ ni | loss   | acc
+---------------------
+ 10 | 0.0105 | 0.9667
+ 10 | 0.0126 | 0.9681
+ 10 | 0.0129 | 0.9644
+ 10 | 0.0126 | 0.9702
+ 11 | 0.0124 | 0.9674
+
+Training on entire training set needed 10 iterations, ended with loss 0.0144 and achieved accuracy 0.9708.
+
+tolerance = 0.001
+------------------
+
+ ni | loss   | acc
+---------------------
+ 17 | 0.0022 | 0.9665
+ 16 | 0.0023 | 0.9711
+ 16 | 0.0026 | 0.9683
+ 16 | 0.0026 | 0.9702
+ 17 | 0.0026 | 0.9704
+
+Training on entire training set needed 17 iterations, ended with loss 0.0020 and achieved accuracy 0.9741.
+
+tolerance = 0.0001
+------------------
+
+ ni | loss   | acc
+---------------------
+ 23 | 0.0014 | 0.9669
+ 24 | 0.0014 | 0.9696
+ 26 | 0.0013 | 0.9665
+ 24 | 0.0014 | 0.9700
+ 26 | 0.0013 | 0.9676
+
+Training on entire training set needed 27 iterations, ended with loss 0.0012 and achieved accuracy 0.9731.
+
+tolerance = 1e-05
+------------------
+
+ ni | loss   | acc
+---------------------
+ 54 | 0.0006 | 0.9693
+ 56 | 0.0006 | 0.9733
+ 56 | 0.0006 | 0.9706
+ 57 | 0.0006 | 0.9741
+ 55 | 0.0006 | 0.9696
+
+Training on entire training set needed 52 iterations, ended with loss 0.0006 and achieved accuracy 0.9729.
+
+ni = number of iterations
+acc = accuracy
+
+Best performing tolerance is 0.001 with accuracy 0.9741.
+
+Time elapsed: 253.015 s
+
+THIRD CROSS-VALIDATION (FOR NEURON WEIGHTS DUE TO DIFFERENT RANDOM INITIALIZATIONS)
+-----------------------------------------------------------------------------------
 
  rs | acc
-------------------
- 10 | 0.9633
- 39 | 0.9665
- 71 | 0.9692
-  3 | 0.9694
- 99 | 0.9676
- 35 | 0.9701
- 82 | 0.9680
- 64 | 0.9692
- 31 | 0.9550
- 12 | 0.9709
+------------
+  6 | 0.9670
+ 39 | 0.9657
+ 97 | 0.9665
+ 78 | 0.9685
+ 56 | 0.9303
+ 10 | 0.9629
+ 62 | 0.9654
+ 40 | 0.9257
+ 96 | 0.9704
+ 74 | 0.9686
 
-Time elapsed: 307.3122158050537 s
+rs = random state
+acc = accuracy
 
-Accuracy of MLP with optimal number of neurons = 100 and optimal learning rate = 0.2 on training set is 0.9741
-Time elapsed: 0.06067490577697754 s
+Time elapsed: 199.929 s
+
+PREDICT LABELS FOR TEST SET AND COMPUTE ACCURACY
+------------------------------------------------
+
+Accuracy of MLP on the entire training set with
+
+  - optimal number of neurons = 100
+  - optimal learning rate = 0.2
+  - optimal tolerance = 0.001
+  - best performing randomly initialized weights
+
+is 0.9716
+   ======
+
+Time elapsed: 0.063 s.
+
+
