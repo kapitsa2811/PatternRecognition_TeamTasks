@@ -185,16 +185,28 @@ for t in range(len(tols)):
         acc.append(metrics.accuracy_score(y_pred, y_test))
         num_iter.append(mlp2.n_iter_)
         loss.append(mlp2.loss_)
-        axes[t].plot(mlp2.loss_curve_)
+        axes[t].plot(mlp2.loss_curve_, label="cv | n_iter = "+repr(mlp2.n_iter_))
+
+    # do training with entire training set
+    mlp2.fit(trainFeatures, trainLabels)
+    # predict entire test set
+    pred_labels2 = mlp2.predict(testFeatures)
+    acc2 = metrics.accuracy_score(pred_labels2, testLabels)
+    axes[t].plot(mlp2.loss_curve_, label="train | n_iter = "+repr(mlp2.n_iter_))
+    axes[t].legend()
 
     # output tested parameters and scores
     print('tolerance = ' + repr(tols[t]))
+    print('------------------')
     print()
     print(' ni | loss   | acc')
     print('---------------------')
     for i in range(cv_num):
         print('{:3.0f} | {:1.4f} | {:1.4f}'.format(num_iter[i], loss[i], acc[i]))
 
+    print()
+    print('Training on entire training set needed {:3.0f} iterations, ended with loss {:1.4f} and achieved '
+          'accuracy {:1.4f}.'.format(mlp2.n_iter_, mlp2.loss_, acc2))
     print()
 
 end2 = time.time()
