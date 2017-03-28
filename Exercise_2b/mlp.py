@@ -53,10 +53,10 @@ print('>> done preparing data')
 # ---------------------------------------------------------------------------------------------------------------------
 # IF YOU WANT TO USE ONLY PART OF THE DATA
 
-trainFeatures = trainFeatures[:100, :]
-trainLabels = trainLabels[:100]
-testFeatures = testFeatures[:10, :]
-testLabels = testLabels[:10]
+# trainFeatures = trainFeatures[:100, :]
+# trainLabels = trainLabels[:100]
+# testFeatures = testFeatures[:10, :]
+# testLabels = testLabels[:10]
 
 
 # ---------------------------------------------------------------------------------------------------------------------
