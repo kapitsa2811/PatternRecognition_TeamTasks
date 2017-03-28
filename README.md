@@ -225,5 +225,5 @@ Accuracy of MLP on the entire training set with
 is 0.9716.
 
 ### Conclusion
-MLPs are much faster than SVMs. Running the whole script can be done in less than an hour although many more MLPs are trained than in Exercise 2a. Regarding accuracy is MLP slightly better than SVM.
+MLPs are much faster than SVMs. Running the whole script can be done in about half an hour although many more MLPs are trained than in Exercise 2a. Regarding accuracy is MLP in the same range as SVM.
 Increasing the number of neurons doesn't increase the running time notably, but increasing the learning rate does slightly.
