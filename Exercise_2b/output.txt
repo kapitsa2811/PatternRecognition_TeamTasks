@@ -105,10 +105,14 @@
 100 | 0.9 | 0.3243
 100 | 1.0 | 0.2435
 
+nn = number of neurons
+lr = learning rate
+acc = accuracy
+
 Time elapsed: 1365.170287847519 s
 
  rs | acc
-------------------
+------------
  10 | 0.9633
  39 | 0.9665
  71 | 0.9692
@@ -119,6 +123,9 @@ Time elapsed: 1365.170287847519 s
  64 | 0.9692
  31 | 0.9550
  12 | 0.9709
+ 
+rs = random state
+acc = accuracy
 
 Time elapsed: 307.3122158050537 s
 
