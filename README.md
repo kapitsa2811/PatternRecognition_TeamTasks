@@ -140,7 +140,7 @@ Before doing so, a first cross-validation (5-fold) is done for the parameters:
 - number of neurons in the hidden layer (in the range [10, 100] with step size 10)
 - learning rate used in stochastic gradient descent (in the range [0.1, 1] with step size 0.1)
 
-In a second step, the number of training iterations (combined with the convergence tolerance) are investigated and optimized during cross-validation (f-fold) and training.
+In a second step, the number of training iterations (combined with the convergence tolerance) are investigated and optimized during cross-validation (5-fold) and training.
 For that, a graph showing the loss on the training set and the validation sets with respect to the training epochs is plotted.
 
 In a third step, another cross-validation (5-fold) is performed for testing several different random initializations for the neuron weights.
@@ -153,12 +153,14 @@ As in exercise 2a, the script, here `mlp.py`, located in the folder `Exercise_2b
 ### Results
 The full output of the script (run with the entire data set) can be found in the file `Exercise_2b\output.txt`.
 
+#### First cross-validation (for number of neurons and learning rate)
+
 The top ten parameter combinations regarding accuracy during the first cross-validation are:
 
 number of neurons | learning rate | accuracy
 --- | --- | ---
- 90 | 0.2 | 0.9698
 100 | 0.2 | 0.9698
+ 90 | 0.2 | 0.9698
 100 | 0.1 | 0.9685
  90 | 0.1 | 0.9684
  90 | 0.3 | 0.9681
@@ -168,27 +170,39 @@ number of neurons | learning rate | accuracy
 100 | 0.3 | 0.9643
 100 | 0.4 | 0.9643
 
-So, the best choice is 90 neurons and a learning rate of 0.2.
+So, the best choice is 100 neurons and a learning rate of 0.2.
 
-Initializing the weights several times randomly yields to the following accuracy values:
+#### Second cross-validation (for tolerance)
+
+![alt text](https://github.com/nela3003/PatternRecognition_TeamTasks/blob/master/Exercise_2b/plot_tolerance.png "Loss Function")
+
+#### Third cross-validation (for neuron weights due to different random initialization)
+
+Initializing randomly the weights several times yields to the following accuracy values:
 
 random state | accuracy
 ---- | ----
- 10 | 0.9633
- 39 | 0.9665
- 71 | 0.9692
-  3 | 0.9694
- 99 | 0.9676
- 35 | 0.9701
- 82 | 0.9680
- 64 | 0.9692
- 31 | 0.9550
- 12 | 0.9709
+  6 | 0.9670
+ 39 | 0.9657
+ 97 | 0.9665
+ 78 | 0.9685
+ 56 | 0.9303
+ 10 | 0.9629
+ 62 | 0.9654
+ 40 | 0.9257
+ 96 | 0.9704
+ 74 | 0.9686
 
-hence an improvement of about 1.6% can be observed.
+hence an improvement of about 4% can be observed.
 
-The total accuracy of the MLP with the optimal number of neurons = 100, the optimal learning rate = 0.2 and the best performing random inital state on the entire training set is 0.9741.
+#### Predict labels for test set and compute accuracy
+Accuracy of MLP on the entire training set with
+  - optimal number of neurons = 100
+  - optimal learning rate = 0.2
+  - optimal tolerance = 0.001
+  - best performing randomly initialized weights
 
+is 0.9716.
 
 ### Conclusion
 MLPs are much faster than SVMs. Running the whole script can be done in less than an hour although many more MLPs are trained than in Exercise 2a. Regarding accuracy is MLP slightly better than SVM.
