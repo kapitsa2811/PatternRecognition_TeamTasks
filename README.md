@@ -196,7 +196,7 @@ From the plots, it can be observed, that a tolerance of 0.0001 and 0.00001 has a
 A choice of 0.1 or 0.01 for the tolerance is maybe to optimistic, since there could still be some improvement done.
 So, if the tolerance would be set manually, a choice of 0.001 as convergence criteria seems reasonable.
 
-In the following table, the mean accuracy can be seen for each of the investigated tolerance values. The mean accuracy us computed by taking the mean from the five accuracy values from the cross validation and the accuracy from training on the entire training set and applying to the entire test set.
+The following table shows the mean accuracy of each investigated tolerance value. The mean accuracy is computed by taking the mean over the five accuracy values from the cross validation and the accuracy from training on the entire training set and applying to the entire test set.
 
 tolerance | mean accuracy
 --- | ---
@@ -206,7 +206,7 @@ tolerance | mean accuracy
 0.0001 |0.9703
 0.00001 | 0.9706
 
-Since the computational time is not critical and the learning only improves (loss decreases, no overfitting),
+Since the computational time is not a critical factor and the learning only improves (loss decreases, no overfitting),
 the script chooses the tolerance which performs best regarding mean accuracy to continue with.
 
 
