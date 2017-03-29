@@ -158,18 +158,18 @@ The top ten parameter combinations regarding accuracy during the first cross-val
 
 number of neurons | learning rate | accuracy
 --- | --- | ---
-100 | 0.1 | 0.9691
- 90 | 0.1 | 0.9683
-100 | 0.3 | 0.9659
- 80 | 0.1 | 0.9651
- 60 | 0.1 | 0.9644
- 70 | 0.1 | 0.9644
- 50 | 0.2 | 0.9643
-100 | 0.2 | 0.9618
- 50 | 0.1 | 0.9584
- 70 | 0.2 | 0.9577
+100 | 0.2 | 0.9698
+ 90 | 0.2 | 0.9698
+100 | 0.1 | 0.9685
+ 90 | 0.1 | 0.9684
+ 90 | 0.3 | 0.9681
+ 80 | 0.1 | 0.9677
+ 80 | 0.2 | 0.9676
+ 90 | 0.4 | 0.9651
+100 | 0.3 | 0.9643
+100 | 0.4 | 0.9643
 
-So, the best choice is 100 neurons and a learning rate of 0.1.
+So, the best choice is 100 neurons and a learning rate of 0.2.
 
 #### Second cross-validation (for tolerance)
 Notes on how convergence in the `MLPClassifier` works:
@@ -192,10 +192,22 @@ So, the following plots show the loss function vs training epochs for the invest
 
 ![alt text](https://github.com/nela3003/PatternRecognition_TeamTasks/blob/master/Exercise_2b/plot_tolerance.png "Loss Function")
 
-From the plots, it can be observed that a tolerance of 0.0001 and 0.00001 doesn't help much in decreasing the loss, since already after 15
-iterations the gain of further training is negligible. A choice of 0.1 or 0.01 for the tolerance is maybe to optimistic, since there could still be some improvement done.
-So, a choice of 0.001 for the tolerance as convergence criteria makes sense. Since the computational time is not critical and the learning only improves,
-the script will choose the tolerance which performs best regarding mean accuracy (mean of accuracy from cross-validation and test set).
+From the plots, it can be observed, that a tolerance of 0.0001 and 0.00001 has already a very low loss after 15 to 20 iterations.
+A choice of 0.1 or 0.01 for the tolerance is maybe to optimistic, since there could still be some improvement done.
+So, if the tolerance would be set manually, a choice of 0.001 as convergence criteria seems reasonable.
+
+In the following table, the mean accuracy can be seen for each of the investigated tolerance values. The mean accuracy us computed by taking the mean from the five accuracy values from the cross validation and the accuracy from training on the entire training set and applying to the entire test set.
+
+tolerance | mean accuracy
+--- | ---
+0.1 | 0.9631
+0.01 | 0.9692
+0.001 | 0.9698
+0.0001 |0.9703
+0.00001 | 0.9706
+
+Since the computational time is not critical and the learning only improves (loss decreases, no overfitting),
+the script chooses the tolerance which performs best regarding mean accuracy to continue with.
 
 
 #### Third cross-validation (for neuron weights due to different random initialization)
@@ -204,27 +216,37 @@ Randomly initializing the weights several times yields to the following accuracy
 
 random state | accuracy
 ---- | ----
- 10 | 0.9577
- 74 | 0.9680
- 50 | 0.9638
- 31 | 0.9631
- 68 | 0.9625
- 90 | 0.9616
- 38 | 0.9660
- 30 | 0.9667
- 26 | 0.9682
- 92 | 0.9685
+ 32 | 0.9676
+ 26 | 0.9694
+ 98 | 0.9626
+ 37 | 0.9628
+ 42 | 0.9701
+  0 | 0.9716
+ 36 | 0.9700
+  3 | 0.9696
+ 31 | 0.9551
+ 18 | 0.9712
+ 17 | 0.9671
+ 49 | 0.9648
+  5 | 0.9633
+  8 | 0.9696
+ 72 | 0.9674
+  9 | 0.7175
+ 23 | 0.9650
+ 60 | 0.9681
+ 13 | 0.9658
+ 12 | 0.9712
 
-hence an improvement of about 1.1% can be observed.
+hence, if the worst case with 0.7175 is ignored, an improvement of about 1.6% can be observed.
 
 #### Predict labels for test set and compute accuracy
 Accuracy of MLP on the entire training set with
   - optimal number of neurons = 100
-  - optimal learning rate = 0.1
+  - optimal learning rate = 0.2
   - optimal tolerance = 0.00001
   - best performing randomly initialized weights
 
-is 0.9730.
+is **0.9737**.
 
 ### Conclusion
 MLPs are much faster than SVMs. Running the whole script can be done in about half an hour although many more MLPs are trained than in Exercise 2a. Regarding accuracy is MLP in the same range as SVM.
