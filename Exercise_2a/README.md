@@ -21,7 +21,7 @@ investigated kernels and all parameter values (C for linear / C and  &gamma; for
 the accuracy on the whole test set with the optimized parameter values.
 
 ## Instructions
-The scripts can be run in once. For that, the two files `train.csv`and `test.csv` (located in the folder `Exercise_2a`)
+The scripts can be run in once. For that, the two files `train.csv`and `test.csv`
 have to be in the same folder as the scripts `svm*.py`. Note: the running time is quite
 immense for the entire data set! You might only include a part of the data set by uncommenting the lines
 ```python
