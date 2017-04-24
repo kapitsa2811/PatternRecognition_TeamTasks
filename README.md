@@ -10,7 +10,7 @@ Team tasks of pattern recognition lecture at Univesity of Fribourg.
 - Marc-Antoine Jacques
 
 ### Language
-- Python 3.6.0
+- Python 3.6.1
 
 ## Content
 
