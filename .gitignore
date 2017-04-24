@@ -4,6 +4,8 @@
 # everyone keeps his/her own data files
 *.csv
 Exercise_2a/data/*
+Exercise_2b/data/*
+Exercise_3/data/*
 
 # R history file
 .Rhistory
