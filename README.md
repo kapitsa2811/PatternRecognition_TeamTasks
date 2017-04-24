@@ -39,3 +39,11 @@ Each exercise has its own folder and its own README file.
         * [Third cross-validation (for neuron weights due to different random initialization)](Exercise_2b#third-cross-validation-for-neuron-weights-due-to-different-random-initialization)
         * [Predict labels for test set and compute accuracy](Exercise_2b#predict-labels-for-test-set-and-compute-accuracy)
     * [Conclusion](Exercise_2b#conclusion)
+
+* [Exercise 3 - Keyword Spotting](Exercise_3)
+    * [Packages](Exercise_3#packages)
+    * [Data](Exercise_3#data)
+    * [Description](Exercise_3#description)
+    * [Instructions](Exercise_3#instructions)
+    * [Results](Exercise_3#results)
+    * [Conclusion](Exercise_3#conclusion)
