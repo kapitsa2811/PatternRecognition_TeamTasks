@@ -23,6 +23,7 @@ class Word:
         self.img = plt.imread('./Exercise_3/data/cropped_words/'+id+'.jpg')
         self.transcript = transcript
 
+# create a list of all words
 
 wordlist = list()
 
@@ -31,3 +32,22 @@ with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
         id, transcript = str.split(line, " ")
         wordlist.append(Word(id, transcript))
 
+del f, id, line, transcript
+
+# divide them into training and validation set
+
+with open('./Exercise_3/data/task/valid.txt') as v:
+    valid_docNr = v.read().splitlines()
+
+del v
+
+train = list()
+valid = list()
+
+for word in wordlist:
+    if word.docNr in valid_docNr:
+        valid.append(word)
+    else:
+        train.append(word)
+
+del wordlist, word, valid_docNr
