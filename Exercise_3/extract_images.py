@@ -132,4 +132,4 @@ for ids in IDs:
     temp[temp >= threshold] = 255
     # Amplify signal (turned off for the moment as it also amplifies remaining background)
     # temp[np.logical_and(temp.mask == 0, temp < threshold )] = 0
-    scipy.misc.toimage(temp, cmin=0.0, cmax=...).save('Exercise_3/data/cropped_words/' + path[0] + '-' + path[1] + '-' + path[2] + '_2.jpg')
+    scipy.misc.toimage(temp, cmin=0.0, cmax=...).save('Exercise_3/data/cropped_words/' + path[0] + '-' + path[1] + '-' + path[2] + '.jpg')
