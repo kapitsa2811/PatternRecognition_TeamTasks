@@ -2,7 +2,12 @@
 
 
 ## Packages
-
+- numpy 1.12.0
+- matplotlib 2.0.0
+- scipy 0.19.0
+- re
+- PIL
+- os
 
 ## Data
 The data used in this exercise is provided in [this linked git repository](https://github.com/lunactic/PatRec17_KWS_Data). The three folders
