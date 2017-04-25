@@ -6,12 +6,14 @@ import matplotlib.pyplot as plt
 plt.rcParams['image.cmap'] = 'gray'
 
 
-# id is a string of the format XXX-YY-ZZ where
-#   XXX = document number
-#    YY = line number
-#    ZZ = word number
+# A class for the words.
 #
-# transcript is a string containing the transcription of the word on a character basis
+# @ id : string of the format XXX-YY-ZZ where
+#          XXX = document number
+#           YY = line number
+#           ZZ = word number
+#
+# @ transcript : string containing the transcription of the word on a character basis
 
 class Word:
     def __init__(self, id, transcript):

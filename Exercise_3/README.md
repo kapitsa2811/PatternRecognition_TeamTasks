@@ -33,10 +33,14 @@ Each of those files contains the bounding boxes for all words on the according d
 The folder `tasks/` contains three files, `keywords.txt`, `train.txt` and `valid.txt`. The files `train.txt` and `valid.txt` contain a splitting of the documents pages into a training and a validation set (by stating the page numbers).
 The file `keywords.txt` contains a list of keywords, which each occurs at least once in both, the training and the validation dataset.
 
+The content of the zipped file `cropped_words.zip` has to be placed into the folder `Exercise_03/data/` on the local machine.
+
 ## Description
 In this exercise, a machine learning approach for spotting keywords in the provided documents will be developed. This approach will be tested on the provided training and validation dataset with the provided keywords that can be found for certain at least once in each set.
 
-First, some preprocessing will be done. This includes binarization of the data and creation of word images.
+First, some preprocessing will be done. This includes binarization of the data and creation of word images. This is done with the sript `extract_images.py`.
+
+Then a list containing all words can be created with the script `create_wordlist.py`.
 
 ## Instructions
 
