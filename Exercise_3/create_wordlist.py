@@ -17,9 +17,9 @@ plt.rcParams['image.cmap'] = 'gray'
 
 class Word:
     def __init__(self, id, transcript):
-        self.docNr = id[0:3]
-        self.lineNr = id[4:6]
-        self.wordNr = id[7:9]
+        self.docNr = int(id[0:3])
+        self.lineNr = int(id[4:6])
+        self.wordNr = int(id[7:9])
         self.img = plt.imread('./Exercise_3/data/cropped_words/'+id+'.jpg')
         self.transcript = transcript
 
@@ -40,6 +40,8 @@ with open('./Exercise_3/data/task/valid.txt') as v:
     valid_docNr = v.read().splitlines()
 
 del v
+
+valid_docNr = [int(x) for x in valid_docNr]
 
 train = list()
 valid = list()
