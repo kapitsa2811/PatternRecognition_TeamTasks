@@ -8,7 +8,6 @@ def ExtractPaths(location_file):
     :param location_file: svg file
     :return: 
     """
-
     import re
     pattern = r'''^
     \s+
@@ -92,6 +91,7 @@ def ExtractImage(image_file, locations, path_id, crop = True):
 # =============================================
 # Extract all locations for all files
 import os
+import numpy as np
 locations = {}
 for file in os.listdir('./Exercise_3/data/ground-truth/locations/'):
     temp = ExtractPaths('./Exercise_3/data/ground-truth/locations/' + file)
@@ -109,3 +109,27 @@ temp = ExtractImage('./Exercise_3/data/images/' + file + '.jpg', locations, path
 plt.imshow(temp, cmap='gray')
 plt.show()
 del path
+
+
+# Produce a cropped image for each word, remove background and save
+# Get all word ids
+IDs = []
+with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
+    for line in f:
+        IDs.append(line.split(sep = " ")[0])
+IDs = [ids.split(sep = "-") for ids in IDs]
+
+# ExtractImage for each word and save
+import scipy.misc
+threshold = 15 # Threshold to remove background percentile of the polygon; 15% looks like a general good compromise
+for ids in IDs:
+    path = tuple(ids)
+    temp = ExtractImage('./Exercise_3/data/images/' + path[0] + '.jpg', locations, path, crop=True)
+    threshold = np.percentile(temp, 15)
+    # Image is rectangular, crop mask is polygone so need to set undesired px as white
+    temp[temp.mask == 1] = 255
+    # Remove background
+    temp[temp >= threshold] = 255
+    # Amplify signal (turned off for the moment as it also amplifies remaining background)
+    # temp[np.logical_and(temp.mask == 0, temp < threshold )] = 0
+    scipy.misc.toimage(temp, cmin=0.0, cmax=...).save('Exercise_3/data/cropped_words/' + path[0] + '-' + path[1] + '-' + path[2] + '_2.jpg')
