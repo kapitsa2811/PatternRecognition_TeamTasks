@@ -1,19 +1,6 @@
 # Take the images jpg, coordinates svg and extract chunks of images
-import numpy as np
-import matplotlib as plt
-
-from xml.dom import minidom
-from svg.path import parse_path
-
-svg_dom = minidom.parseString('./ground-truth/locations/270.svg')
-
-path_strings = [path.getAttribute('d') for path in svg_dom.getElementsByTagName('path')]
-
-for path_string in path_strings:
-    path_data = parse_path(path_string)
-
-
-def ExtractCoordinates(location_file):
+# =============================================
+def ExtractPaths(location_file):
     """
     Extract all path from svg file, along with ID
     :param location_file: svg file
@@ -23,19 +10,84 @@ def ExtractCoordinates(location_file):
     import re
     pattern = r'''^
     \s+
-    <path\
-    fill="none"\
-    d=(?P<path>".*?")\
+    <path\s
+    fill=".*?"\s
+    d="(?P<path>.*?)"\s
+    stroke-width=".*?"\s
+    id="(?P<id>.*?)"\s
+    stroke=".*?"
+    />
+    $
     '''
-    out = []
+    out = {}
     pattern = re.compile(pattern, re.VERBOSE)
     with open(location_file) as f:
         for line in f:
             result = pattern.search(line)
             if result:
-                print("match")
                 path = result.group('path')
-                out.append(path)
+                id = result.group('id')
+                id = tuple(id.split('-'))
+                out[id] = path
     return out
 
-temp = ExtractCoordinates('./Exercise_3/data/ground-truth/locations/270.svg')
+# =============================================
+def PathToPolygon(path):
+    """
+    Convert an SVG segments path to a polygon list, use as mask to isolate chunk of image
+    :param path: svg path (characters string) that looks like 'M 1131.00 600.00 L 1151.00 599.00 L 1211.00 599.00 Z'
+    :return: A list of tuples with the coordinates of the vertices of the corresponding polygon
+    """
+
+    # Trim start and end of path
+    path = path.lstrip('M ').rstrip(' Z')
+    # Isolate segments start and end
+    path = path.split('L ')
+    path = [pair.rstrip() for pair in path]
+    # Convert to float
+    polygon = [pair.split() for pair in path]
+    polygon = [(float(pair[0]), float(pair[1])) for pair in polygon]
+    return polygon
+
+a = locations[('270','01','01')]
+temp = PathToPolygon(a)
+temp
+
+# =============================================
+def ExtractImage(image_file, locations, path_id):
+    """
+    Extract the part of an image delimited by path
+    :param image_file: a jpg file
+    :param locations: a dictionary with path ids as keys in format (XXX-YY-ZZ) and path in items
+    :param path_id: id of the chunk to extract
+    :return: a masked numpy array with only the specified path unmasked
+    """
+    import numpy as np
+    from PIL import Image, ImageDraw
+
+    image = Image.open(image_file)
+    image = np.asarray(image)
+    polygon = PathToPolygon(locations[path_id])
+    maskIm = Image.new('L', (image.shape[1], image.shape[0]), 1)
+    ImageDraw.Draw(maskIm).polygon(polygon, outline=1, fill=0)
+    mask = np.array(maskIm)
+    image2 = np.ma.array(image, mask=mask)
+    return image, maskIm, mask, image2
+
+# =============================================
+from matplotlib import pyplot as plt
+temp,temp2,temp3,temp4 = ExtractImage('./Exercise_3/data/images/270.jpg', locations, ('270','01','01'))
+plt.imshow(temp4, cmap='gray')
+plt.show()
+
+
+image = Image.open('./Exercise_3/data/images/270.jpg')
+image = np.asarray(image)
+
+
+
+# Extract all locations
+locations = {}
+for file in os.listdir('./Exercise_3/data/ground-truth/locations/'):
+    temp = ExtractPaths('./Exercise_3/data/ground-truth/locations/'+file)
+    locations.update(temp)
