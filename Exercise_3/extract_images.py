@@ -1,4 +1,4 @@
-# Take the images jpg, coordinates svg and extract chunks of images
+# Take the images in .jpg, coordinates in .svg and extract chunks of images as masked numpy arrays
 # =============================================
 
 
