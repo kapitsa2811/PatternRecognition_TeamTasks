@@ -62,12 +62,13 @@ def PathToPolygon(path):
 # =============================================
 
 
-def ExtractImage(image_file, locations, path_id):
+def ExtractImage(image_file, locations, path_id, crop = True):
     """
     Extract the part of an image delimited by path
     :param image_file: a jpg file
     :param locations: a dictionary with path ids as keys in format (XXX-YY-ZZ) and path as items
     :param path_id: id of the chunk to extract
+    :param crop: If False returns image of same size as original, if True remove rows and columns that are fully masked
     :return: a masked numpy array with only the specified path unmasked
     """
     import numpy as np
@@ -78,10 +79,13 @@ def ExtractImage(image_file, locations, path_id):
     polyg = PathToPolygon(locations[path_id])
     # Create an image filled with 1, set 0 in the region delimited by the polygon
     maskIm = Image.new('L', (image.shape[1], image.shape[0]), 1)
-    ImageDraw.Draw(maskIm).polygon(polyg, outline=1, fill=0)
+    ImageDraw.Draw(maskIm).polygon(polyg, outline=0, fill=0)
     # Use the previous function as a mask
     mask = np.array(maskIm)
     masked_image = np.ma.array(image, mask=mask)
+    if crop:
+        masked_image = masked_image[~np.all(masked_image == 0, axis=1), :]
+        masked_image = masked_image[:, ~np.all(masked_image == 0, axis=0)]
     return masked_image
 
 
@@ -96,12 +100,12 @@ del temp, file
 
 # Access
 file = '271'
-line = '09'
-word = '08'
+line = '22'
+word = '04'
 
 path = (file, line, word)
 from matplotlib import pyplot as plt
-temp = ExtractImage('./Exercise_3/data/images/' + file + '.jpg', locations, path)
+temp = ExtractImage('./Exercise_3/data/images/' + file + '.jpg', locations, path, crop=True)
 plt.imshow(temp, cmap='gray')
 plt.show()
 del path
