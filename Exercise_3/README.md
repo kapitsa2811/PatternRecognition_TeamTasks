@@ -38,14 +38,20 @@ Each of those files contains the bounding boxes for all words on the according d
 The folder `tasks/` contains three files, `keywords.txt`, `train.txt` and `valid.txt`. The files `train.txt` and `valid.txt` contain a splitting of the documents pages into a training and a validation set (by stating the page numbers).
 The file `keywords.txt` contains a list of keywords, which each occurs at least once in both, the training and the validation dataset.
 
-The content of the zipped file `cropped_words.zip` has to be placed into the folder `Exercise_03/data/` on the local machine.
+The content of the zipped file `Exercise_3/cropped_words.zip` has to be placed into the folder `Exercise_03/data/` on the local machine.
 
 ## Description
 In this exercise, a machine learning approach for spotting keywords in the provided documents will be developed. This approach will be tested on the provided training and validation dataset with the provided keywords that can be found for certain at least once in each set.
 
-First, some preprocessing will be done. This includes binarization of the data and creation of word images. This is done with the sript `extract_images.py`.
+First, some preprocessing will be done. This includes binarization of the data and creation of word images. This is done with the sript `extract_images.py`. The output of this script is already provided in the the zip-file `Exercise_3/cropped_words.zip`.
 
-Then a list containing all words can be created with the script `create_wordlist.py`.
+Then, the training and validation sets (each is a list of objects of type `Word`) can be created with the script `create_wordlist.py`. The division into training and validation sets is according to the files `train.txt` and `valid.txt` from the folder `Exercise_3/task/`. An object of class `Word` contains the following attributes:
+
+- `docNr` : string, the number of the document
+- `lineNr` : the number of the line in the document
+- `wordNr` : the number of the word in the line
+- `img` : the image of the word as numpy array
+- `transcript` : the transcription of the word on a character basis as described above
 
 ## Instructions
 
