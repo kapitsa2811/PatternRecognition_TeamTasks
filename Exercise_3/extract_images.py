@@ -89,6 +89,21 @@ def ExtractImage(image_file, locations, path_id, crop = True):
 
 
 # =============================================
+
+
+def RemoveBackground(img):
+    try:
+        from skimage import filters
+    except ImportError:
+        from skimage import filter as filters
+    image = np.copy(img)
+    otsu_val = filters.threshold_otsu(img)
+    image[image >= otsu_val] = 255
+    image[image <= otsu_val] = 0
+    return image
+
+
+# =============================================
 # Extract all locations for all files
 import os
 import numpy as np
@@ -98,20 +113,7 @@ for file in os.listdir('./Exercise_3/data/ground-truth/locations/'):
     locations.update(temp)
 del temp, file
 
-# Access
-file = '271'
-line = '22'
-word = '04'
-
-path = (file, line, word)
-from matplotlib import pyplot as plt
-temp = ExtractImage('./Exercise_3/data/images/' + file + '.jpg', locations, path, crop=True)
-plt.imshow(temp, cmap='gray')
-plt.show()
-del path
-
-
-# Produce a cropped image for each word, remove background and save
+# =============================================
 # Get all word ids
 IDs = []
 with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
@@ -119,17 +121,94 @@ with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
         IDs.append(line.split(sep = " ")[0])
 IDs = [ids.split(sep = "-") for ids in IDs]
 
+# =============================================
+# Filtered versions of the images
+import scipy.misc
+from PIL import Image, ImageDraw
+img_names = [str(i) for i in range(270,280)]
+img_names.extend(['301','302','303','304'])
+img_names = ['./Exercise_3/data/filtered_images/'+i+'.jpg' for i in img_names]
+
+for im in img_names:
+    image = Image.open(im)
+    image = np.asarray(image)
+    image = RemoveBackground(image)
+    scipy.misc.toimage(image, cmin=0.0, cmax=...).save(im)
+
+
+# =============================================
+# Produce a cropped image for each word, remove background and save
 # ExtractImage for each word and save
 import scipy.misc
-threshold = 15 # Threshold to remove background percentile of the polygon; 15% looks like a general good compromise
+#threshold = 15 # Threshold to remove background percentile of the polygon; 15% looks like a general good compromise
 for ids in IDs:
     path = tuple(ids)
     temp = ExtractImage('./Exercise_3/data/images/' + path[0] + '.jpg', locations, path, crop=True)
     threshold = np.percentile(temp, 15)
     # Image is rectangular, crop mask is polygone so need to set undesired px as white
-    temp[temp.mask == 1] = 255
+    #temp[temp.mask == 1] = 255
     # Remove background
-    temp[temp >= threshold] = 255
+    temp = RemoveBackground(temp)
+    #temp[temp >= threshold] = 255
     # Amplify signal (turned off for the moment as it also amplifies remaining background)
     # temp[np.logical_and(temp.mask == 0, temp < threshold )] = 0
-    scipy.misc.toimage(temp, cmin=0.0, cmax=...).save('Exercise_3/data/cropped_words/' + path[0] + '-' + path[1] + '-' + path[2] + '.jpg')
+    scipy.misc.toimage(temp, cmin=0.0, cmax=...).save('Exercise_3/data/cropped_words_otsu/' + path[0] + '-' + path[1] + '-' + path[2] + '.jpg')
+
+
+# =============================================
+# Access example
+file = '271'
+line = '22'
+word = '04'
+path = (file, line, word)
+from matplotlib import pyplot as plt
+temp = ExtractImage('./Exercise_3/data/images/' + file + '.jpg', locations, path, crop=True)
+plt.imshow(temp, cmap='gray')
+plt.show()
+del path
+
+temp2 = np.copy(temp)
+temp2[temp2 >= threshold] = 255
+temp3 = RemoveBackground(temp) # Otsu
+
+plt.subplot(1,3,1)
+plt.imshow(temp, cmap='gray')
+plt.title('Original')
+plt.subplot(1,3,2)
+plt.imshow(temp2, cmap='gray')
+plt.title('Percentile Threshold')
+plt.subplot(1,3,3)
+plt.imshow(temp3, cmap='gray')
+plt.title('Otsu Threshold')
+plt.show()
+
+# ======
+img =
+a = RemoveBackground()
+
+file = '270'
+line = '10'
+word = '05'
+path = (file, line, word)
+from matplotlib import pyplot as plt
+temp = ExtractImage('./Exercise_3/data/images/' + file + '.jpg', locations, path, crop=True)
+del path
+
+threshold = np.percentile(temp, 15)
+temp2 = np.copy(temp)
+temp2[temp.mask == 1] = 255
+temp2[temp2 >= threshold] = 255
+
+temp3 = RemoveBackground(temp) # Otsu
+
+plt.subplot(1,3,1)
+plt.imshow(temp, cmap='gray')
+plt.title('Original')
+plt.subplot(1,3,2)
+plt.imshow(temp2, cmap='gray')
+plt.title('Percentile Threshold')
+plt.subplot(1,3,3)
+plt.imshow(temp3, cmap='gray')
+plt.title('Otsu Threshold')
+plt.show()
+
