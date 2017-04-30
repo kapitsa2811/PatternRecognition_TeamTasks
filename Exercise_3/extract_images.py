@@ -1,5 +1,8 @@
 # Take the images in .jpg, coordinates in .svg and extract chunks of images as masked numpy arrays
-# =============================================
+
+# =============================================#
+#             Functions definitions            #
+# =============================================#
 
 
 def ExtractPaths(location_file):
@@ -53,11 +56,6 @@ def PathToPolygon(path):
     return polygon
 
 
-# Example
-# a = locations[('270','01','01')]
-# temp = PathToPolygon(a)
-# temp
-
 # =============================================
 
 
@@ -89,20 +87,101 @@ def ExtractImage(image_file, locations, path_id, crop = True):
 
 
 # =============================================
+
+
+def RemoveBackground(img, method, window_size = 25, k = 0.8):
+    """
+    Create a binary image separating foreground from background
+    :param img: a numpy array
+    :param method: one of ['otsu', 'niblack', 'sauvola']
+    :param window_size: size of neighborhood used to define threshold, used in ['niblack', 'sauvola']
+    :param k: used to tune local threshold, used in ['niblack', 'sauvola']
+    :return: numpy array, representing a binary image
+    """
+    try:
+        from skimage import filters
+    except ImportError:
+        from skimage import filter as filters
+    image = np.copy(img)
+    if method == 'otsu':
+        threshold = filters.threshold_otsu(img)
+    elif method == 'niblack':
+        threshold = filters.threshold_niblack(img, window_size, k)
+    elif method == 'sauvola':
+        threshold = filters.threshold_sauvola(img)
+    image[image >= threshold] = 255
+    image[image <= threshold] = 0
+    return image
+
+
+
+# =============================================#
+#                Apply functions               #
+# =============================================#
+
 # Extract all locations for all files
 import os
 import numpy as np
+
 locations = {}
 for file in os.listdir('./Exercise_3/data/ground-truth/locations/'):
     temp = ExtractPaths('./Exercise_3/data/ground-truth/locations/' + file)
     locations.update(temp)
 del temp, file
 
-# Access
+# =============================================
+# Get all words ids
+IDs = []
+with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
+    for line in f:
+        IDs.append(line.split(sep = " ")[0])
+IDs = [ids.split(sep = "-") for ids in IDs]
+
+# =============================================
+# Create and save a filtered version of the image files
+# /!\ Create subfolders for each method and fill them with a copy of each image file /!\
+import scipy.misc
+from PIL import Image
+
+img_names = [str(i) for i in range(270,280)]
+img_names.extend([str(i) for i in range(300,305)])
+
+for method in ['otsu', 'sauvola']:
+    img_name = ['./Exercise_3/data/filtered_images/'+ method + '/' + i + '.jpg' for i in img_names]
+    for im in img_name:
+        image = Image.open(im)
+        image = np.asarray(image)
+        image = RemoveBackground(img=image, method=method)
+        scipy.misc.toimage(image, cmin=0.0, cmax=...).save(im)
+
+
+# =============================================
+# Produce a cropped image for each word, remove background and save
+import scipy.misc
+
+for method in ['otsu', 'sauvola']:
+    for ids in IDs:
+        path = tuple(ids)
+        temp = ExtractImage('./Exercise_3/data/filtered_images/' + method + '/' + path[0] + '.jpg', locations, path, crop=True)
+        # Image is rectangular, crop mask is non-rectangular polygon so need to set undesired px as white
+        temp[temp.mask == 1] = 255
+        scipy.misc.toimage(temp, cmin=0.0, cmax=...).save('Exercise_3/data/cropped_words/'+ method + '/' + path[0] + '-' + path[1] + '-' + path[2] + '.jpg')
+
+
+# =============================================#
+#       Example section and visualization      #
+# =============================================#
+
+# Polygon path
+# a = locations[('270','01','01')]
+# temp = PathToPolygon(a)
+# temp
+
+# =============================================
+# Extract a word form an image
 file = '271'
 line = '22'
 word = '04'
-
 path = (file, line, word)
 from matplotlib import pyplot as plt
 temp = ExtractImage('./Exercise_3/data/images/' + file + '.jpg', locations, path, crop=True)
@@ -110,26 +189,47 @@ plt.imshow(temp, cmap='gray')
 plt.show()
 del path
 
+# =============================================
+# Compare background removal methods,
+# There's a scikit-image builtin function for simpler thresholds but results are not as good, see based on http://scikit-image.org/docs/dev/auto_examples/segmentation/plot_thresholding.html
+# from skimage.filters import try_all_threshold
 
-# Produce a cropped image for each word, remove background and save
-# Get all word ids
-IDs = []
-with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
-    for line in f:
-        IDs.append(line.split(sep = " ")[0])
-IDs = [ids.split(sep = "-") for ids in IDs]
+# Source code based on http://scikit-image.org/docs/dev/auto_examples/segmentation/plot_niblack_sauvola.html
+import matplotlib.pyplot as plt
+from skimage.filters import (threshold_otsu, threshold_niblack,
+                             threshold_sauvola)
 
-# ExtractImage for each word and save
-import scipy.misc
-threshold = 15 # Threshold to remove background percentile of the polygon; 15% looks like a general good compromise
-for ids in IDs:
-    path = tuple(ids)
-    temp = ExtractImage('./Exercise_3/data/images/' + path[0] + '.jpg', locations, path, crop=True)
-    threshold = np.percentile(temp, 15)
-    # Image is rectangular, crop mask is polygone so need to set undesired px as white
-    temp[temp.mask == 1] = 255
-    # Remove background
-    temp[temp >= threshold] = 255
-    # Amplify signal (turned off for the moment as it also amplifies remaining background)
-    # temp[np.logical_and(temp.mask == 0, temp < threshold )] = 0
-    scipy.misc.toimage(temp, cmin=0.0, cmax=...).save('Exercise_3/data/cropped_words/' + path[0] + '-' + path[1] + '-' + path[2] + '.jpg')
+for im in ['./Exercise_3/data/images/'+ i + '.jpg' for i in img_names][0:3]:
+    image = Image.open(im)
+    image = np.asarray(image)
+    binary_global = image > threshold_otsu(image)
+
+    window_size = 25
+    thresh_niblack = threshold_niblack(image, window_size=window_size, k=0.8)
+    thresh_sauvola = threshold_sauvola(image, window_size=window_size)
+
+    binary_niblack = image > thresh_niblack
+    binary_sauvola = image > thresh_sauvola
+
+    plt.figure(figsize=(8, 7))
+    plt.subplot(2, 2, 1)
+    plt.imshow(image, cmap=plt.cm.gray)
+    plt.title('Original')
+    plt.axis('off')
+
+    plt.subplot(2, 2, 2)
+    plt.title('Otsu Threshold')
+    plt.imshow(binary_global, cmap=plt.cm.gray)
+    plt.axis('off')
+
+    plt.subplot(2, 2, 3)
+    plt.imshow(binary_niblack, cmap=plt.cm.gray)
+    plt.title('Niblack Threshold')
+    plt.axis('off')
+
+    plt.subplot(2, 2, 4)
+    plt.imshow(binary_sauvola, cmap=plt.cm.gray)
+    plt.title('Sauvola Threshold')
+    plt.axis('off')
+
+    plt.show()
