@@ -201,7 +201,7 @@ from skimage.filters import (threshold_otsu, threshold_niblack,
 
 for im in ['./Exercise_3/data/images/'+ i + '.jpg' for i in img_names][0:3]:
     image = Image.open(im)
-    image = np.asarray(img)
+    image = np.asarray(image)
     binary_global = image > threshold_otsu(image)
 
     window_size = 25
