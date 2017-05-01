@@ -6,24 +6,96 @@ from PIL import Image
 
 
 def calculateFeatureVector(filename):
-    img = np.asarray(Image.open(filename).resize((200, 200)))
+    img= loadAndResizeImg(filename)
+    return getFeatureVector(img)
 
-    G = np.zeros((200, 200, 3))
+
+def loadAndResizeImg(filename):
+    img = np.asarray(Image.open(filename).resize((200, 200)))
+    G = np.zeros((200, 200))
 
     # Where we set the RGB for each pixel
     G[img > 150] = True
-    G[not True] = False
+    G[img <= 150] = False
     img = G
-
     plt.imshow(img)
     plt.show()
     return img
 
 
-def window_stack(a, stepsize=1, width=1):
-    n = a.shape[0]
-    return np.hstack( a[i:1+n+i-width:stepsize] for i in range(0,width) )
+def getLowerContur(column):
+    for i in range(len(column)):
+        if column[i] == False:
+            return i
+        else:
+            None
+
+
+def getUpperContur(column):
+    for i in reversed(range(len(column))):
+        if column[i] == False:
+            return i
+        else:
+            None
+
+
+def getBWTransitions(column):
+    counter = 0
+    for i in range(len(column)-1):
+        if column[i] != column[i+1]:
+            counter = counter +1
+
+    return counter
+
+
+def getFractionOfBlackPxInWindow(column):
+    counter = 0
+    for i in range(len(column)):
+        if column[i] == False:
+            counter = counter +1
+
+    return counter/len(column)
+
+
+def getFractionOfBlackPxBtwLcAndUc(column, lc, uc):
+    if lc == None or uc == None:
+        return None
+    counter = 0
+    for i in range(lc,uc):
+        if column[i] == False:
+            counter = counter +1
+
+    return counter/len(range(lc,uc))
+
+
+def getGradientDifferenceLcUc(column):
+    pass
+
+
+def calculateFeatures(column):
+    features = []
+    #Lower contur
+    features.append(getLowerContur(column))
+    features.append(getUpperContur(column))
+    features.append(getBWTransitions(column))
+    features.append(getFractionOfBlackPxInWindow(column))
+    features.append(getFractionOfBlackPxBtwLcAndUc(column, features[0], features[1]))
+    return features
+   # features.append(getGradientDifferenceLcUc(column))
+
+
+
+
+def getFeatureVector(a):
+    featureList = list()
+    for i in range(200):
+        featureList.append(calculateFeatures(a[:,i]))
+
+    return featureList
+
+
 
 imt = calculateFeatureVector("test"+'.jpg')
-window_stack(imt,1,1)
+print(imt)
+
 
