@@ -29,7 +29,7 @@ def DTWDistance(s1, s2):
     return sqrt(DTW[len(s1)-1, len(s2)-1])
 
 
-#img1 = calculateFeatureVector("test.jpg")
-#img2= calculateFeatureVector("test2.jpg")
+img1 = calculateFeatureVector("test.jpg")
+img2= calculateFeatureVector("test2.jpg")
 
-#print(DTWDistance(img1,img2))
+print(DTWDistance(img1,img2))

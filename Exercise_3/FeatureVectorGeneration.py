@@ -25,6 +25,7 @@ def getLowerContur(column):
     for i in range(len(column)):
         if column[i] == False:
             return i
+    return 0
 
 
 
@@ -32,7 +33,7 @@ def getUpperContur(column):
     for i in reversed(range(len(column))):
         if column[i] == False:
             return i
-
+    return 199
 
 
 def getBWTransitions(column):
@@ -77,8 +78,8 @@ def calculateFeatures(column):
     features.append(getBWTransitions(column)/7)
     features.append(getFractionOfBlackPxInWindow(column))
     features.append(getFractionOfBlackPxBtwLcAndUc(column, features[0], features[1]))
-    #features[0] = float(features[0]/199)
-    #features[1] = float(features[1]/199)
+    features[0] = float(features[0]/199)
+    features[1] = float(features[1]/199)
     return features
    # features.append(getGradientDifferenceLcUc(column))
 
