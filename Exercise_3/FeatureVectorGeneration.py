@@ -74,7 +74,7 @@ def getGradientDifferenceLcUc(column):
 
 def calculateFeatures(column):
     features = []
-    #Lower contur
+    #Slides from Exercise 7 slides , slide 14
     features.append(getLowerContur(column))
     features.append(getUpperContur(column))
     features.append(getBWTransitions(column))
