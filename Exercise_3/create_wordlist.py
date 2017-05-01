@@ -60,3 +60,7 @@ for word in wordlist:
         train.append(word)
 
 del wordlist, word, valid_docNr
+
+# Time Wrapping
+
+
