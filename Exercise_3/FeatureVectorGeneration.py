@@ -18,8 +18,6 @@ def loadAndResizeImg(filename):
     G[img > 150] = True
     G[img <= 150] = False
     img = G
-    plt.imshow(img)
-    plt.show()
     return img
 
 
@@ -61,11 +59,12 @@ def getFractionOfBlackPxBtwLcAndUc(column, lc, uc):
     if lc == None or uc == None:
         return None
     counter = 0
-    for i in range(lc,uc):
+    upperBound = uc + 1 if uc +1 <=200 else 200
+    for i in range(lc,upperBound):
         if column[i] == False:
             counter = counter +1
 
-    return counter/len(range(lc,uc))
+    return counter/len(range(lc,upperBound))
 
 
 def getGradientDifferenceLcUc(column):
@@ -92,10 +91,5 @@ def getFeatureVector(a):
         featureList.append(calculateFeatures(a[:,i]))
 
     return featureList
-
-
-
-imt = calculateFeatureVector("test"+'.jpg')
-print(imt)
 
 
