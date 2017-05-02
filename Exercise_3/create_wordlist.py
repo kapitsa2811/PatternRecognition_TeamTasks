@@ -1,11 +1,12 @@
 # Imports
 import numpy as np
 import matplotlib.pyplot as plt
+from FeatureVectorGeneration import calculateFeatureVector
 
 # Change the default colormap to gray
+
+
 plt.rcParams['image.cmap'] = 'gray'
-
-
 # A class for the words.
 #
 # @ id : string of the format XXX-YY-ZZ where
@@ -15,6 +16,11 @@ plt.rcParams['image.cmap'] = 'gray'
 #
 # @ transcript : string containing the transcription of the word on a character basis
 
+
+
+
+
+
 class Word:
     def __init__(self, id, transcript):
         self.docNr = int(id[0:3])
@@ -22,6 +28,7 @@ class Word:
         self.wordNr = int(id[7:9])
         self.img = plt.imread('./Exercise_3/data/cropped_words/'+id+'.jpg')
         self.transcript = transcript
+        self.featureVector = calculateFeatureVector('./Exercise_3/data/cropped_words/' + id + '.jpg')
 
 # create a list of all words
 
@@ -53,3 +60,7 @@ for word in wordlist:
         train.append(word)
 
 del wordlist, word, valid_docNr
+
+# Time Wrapping
+
+
