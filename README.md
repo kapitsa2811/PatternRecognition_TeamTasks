@@ -1,6 +1,6 @@
 # PatternRecognition_TeamTasks
 
-Team tasks of pattern recognition lecture at Univesity of Fribourg.
+Team tasks to lecture "Pattern Recognition" at University of Fribourg.
 
 ### Team 'Over9000'
 - Livio Baetscher
