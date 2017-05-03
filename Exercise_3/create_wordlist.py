@@ -1,32 +1,49 @@
 # Imports
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+sys.path.append('./Exercise_3')
 from FeatureVectorGeneration import calculateFeatureVector
 
 # Change the default colormap to gray
-
-
 plt.rcParams['image.cmap'] = 'gray'
-# A class for the words.
-#
-# @ id : string of the format XXX-YY-ZZ where
-#          XXX = document number
-#           YY = line number
-#           ZZ = word number
-#
-# @ transcript : string containing the transcription of the word on a character basis
-
-
-
-
 
 
 class Word:
+    """ A class for the words.
+    
+    Parameters
+    ----------
+    id : str
+        The string has to be of the format XXX-YY-ZZ where
+            XXX = document number
+             YY = line number
+             ZZ = word number
+        that describes the exact location of the word.
+     transcript : str
+        Human readable string containing the transcription of the word on a character basis.
+     
+     Attributes
+     ----------
+     docNr : int
+        The number of the document the word is in, extracted from parameter 'id'.
+     lineNr : int
+        The number of the line in the document the word is in, extracted from parameter 'id'.
+     wordNr : int
+        The number of the word in the line it is in, extracted from parameter 'id'.
+     img : ndarray
+        2D array containing the pixel values of the word's image.
+     transcript : str
+        Human readable string containing the transcription of the word on a character basis.
+     featureVector : list ??? TODO
+        ??? TODO
+     
+    """
     def __init__(self, id, transcript):
         self.docNr = int(id[0:3])
         self.lineNr = int(id[4:6])
         self.wordNr = int(id[7:9])
-        self.img = plt.imread('./Exercise_3/data/cropped_words/'+id+'.jpg')
+        self.img = plt.imread('./Exercise_3/data/cropped_words/' + id + '.jpg')
         self.transcript = transcript
         self.featureVector = calculateFeatureVector('./Exercise_3/data/cropped_words/' + id + '.jpg')
 
@@ -59,8 +76,5 @@ for word in wordlist:
     else:
         train.append(word)
 
-del wordlist, word, valid_docNr
-
-# Time Wrapping
-
+del word, wordlist, valid_docNr
 

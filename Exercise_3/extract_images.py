@@ -1,4 +1,17 @@
-# Take the images in .jpg, coordinates in .svg and extract chunks of images as masked numpy arrays
+# Take the images in .jpg, coordinates in .svg and extract binarized chunks of images as masked numpy arrays
+
+# Imports
+import re
+import os
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.misc import imsave as ims
+from PIL import Image, ImageDraw
+from skimage.filters import threshold_otsu, threshold_niblack, threshold_sauvola
+try:
+    from skimage import filters
+except ImportError:
+    from skimage import filter as filters
 
 # =============================================#
 #             Functions definitions            #
@@ -11,7 +24,6 @@ def ExtractPaths(location_file):
     :param location_file: svg file
     :return: 
     """
-    import re
     pattern = r'''^
     \s+
     <path\s
@@ -68,11 +80,7 @@ def ExtractImage(image_file, locations, path_id, crop = True):
     :param crop: If False returns image of same size as original, if True remove rows and columns that are fully masked
     :return: a masked numpy array with only the specified path unmasked
     """
-    import numpy as np
-    from PIL import Image, ImageDraw
-
-    image = Image.open(image_file)
-    image = np.asarray(image)
+    image = plt.imread(image_file)
     polyg = PathToPolygon(locations[path_id])
     # Create an image filled with 1, set 0 in the region delimited by the polygon
     maskIm = Image.new('L', (image.shape[1], image.shape[0]), 1)
@@ -98,10 +106,6 @@ def RemoveBackground(img, method, window_size = 25, k = 0.8):
     :param k: used to tune local threshold, used in ['niblack', 'sauvola']
     :return: numpy array, representing a binary image
     """
-    try:
-        from skimage import filters
-    except ImportError:
-        from skimage import filter as filters
     image = np.copy(img)
     if method == 'otsu':
         threshold = filters.threshold_otsu(img)
@@ -109,10 +113,9 @@ def RemoveBackground(img, method, window_size = 25, k = 0.8):
         threshold = filters.threshold_niblack(img, window_size, k)
     elif method == 'sauvola':
         threshold = filters.threshold_sauvola(img)
-    image[image >= threshold] = 255
     image[image <= threshold] = 0
+    image[image >= threshold] = 255
     return image
-
 
 
 # =============================================#
@@ -120,8 +123,6 @@ def RemoveBackground(img, method, window_size = 25, k = 0.8):
 # =============================================#
 
 # Extract all locations for all files
-import os
-import numpy as np
 
 locations = {}
 for file in os.listdir('./Exercise_3/data/ground-truth/locations/'):
@@ -134,38 +135,37 @@ del temp, file
 IDs = []
 with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
     for line in f:
-        IDs.append(line.split(sep = " ")[0])
-IDs = [ids.split(sep = "-") for ids in IDs]
+        IDs.append(line.split(sep=" ")[0])
+IDs = [ids.split(sep="-") for ids in IDs]
 
 # =============================================
 # Create and save a filtered version of the image files
-# /!\ Create subfolders for each method and fill them with a copy of each image file /!\
-import scipy.misc
-from PIL import Image
+# /!\  Create folder 'filtered_images' in folder 'data' and  /!\
+# /!\     place two subfolders 'sauvola' and 'otsu' in it    /!\
 
-img_names = [str(i) for i in range(270,280)]
-img_names.extend([str(i) for i in range(300,305)])
+img_names = [str(i) for i in range(270, 280)]
+img_names.extend([str(i) for i in range(300, 305)])
 
 for method in ['otsu', 'sauvola']:
-    img_name = ['./Exercise_3/data/filtered_images/'+ method + '/' + i + '.jpg' for i in img_names]
+    img_name = [i + '.jpg' for i in img_names]
     for im in img_name:
-        image = Image.open(im)
+        image = Image.open('./Exercise_3/data/images/' + im)
         image = np.asarray(image)
         image = RemoveBackground(img=image, method=method)
-        scipy.misc.toimage(image, cmin=0.0, cmax=...).save(im)
-
+        ims(name='./Exercise_3/data/filtered_images/'+ method + '/' + im.replace('jpg', 'png'), arr=image)
 
 # =============================================
 # Produce a cropped image for each word, remove background and save
-import scipy.misc
 
 for method in ['otsu', 'sauvola']:
     for ids in IDs:
         path = tuple(ids)
-        temp = ExtractImage('./Exercise_3/data/filtered_images/' + method + '/' + path[0] + '.jpg', locations, path, crop=True)
+        temp = ExtractImage('./Exercise_3/data/filtered_images/' + method + '/' + path[0] + '.png', locations, path,
+                            crop=True)
         # Image is rectangular, crop mask is non-rectangular polygon so need to set undesired px as white
-        temp[temp.mask == 1] = 255
-        scipy.misc.toimage(temp, cmin=0.0, cmax=...).save('Exercise_3/data/cropped_words/'+ method + '/' + path[0] + '-' + path[1] + '-' + path[2] + '.jpg')
+        temp = np.ma.filled(temp, 1)
+        ims(name='Exercise_3/data/cropped_words/' + method + '/' + path[0] + '-' + path[1] + '-' + path[2]
+                         + '.png', arr=temp)
 
 
 # =============================================#
@@ -183,23 +183,19 @@ file = '271'
 line = '22'
 word = '04'
 path = (file, line, word)
-from matplotlib import pyplot as plt
 temp = ExtractImage('./Exercise_3/data/images/' + file + '.jpg', locations, path, crop=True)
-plt.imshow(temp, cmap='gray')
+plt.imshow(temp, cmap=plt.get_cmap('gray'))
 plt.show()
 del path
 
 # =============================================
 # Compare background removal methods,
-# There's a scikit-image builtin function for simpler thresholds but results are not as good, see based on http://scikit-image.org/docs/dev/auto_examples/segmentation/plot_thresholding.html
-# from skimage.filters import try_all_threshold
+# There's a scikit-image builtin function for simpler thresholds but results are not as good,
+# see based on http://scikit-image.org/docs/dev/auto_examples/segmentation/plot_thresholding.html
 
 # Source code based on http://scikit-image.org/docs/dev/auto_examples/segmentation/plot_niblack_sauvola.html
-import matplotlib.pyplot as plt
-from skimage.filters import (threshold_otsu, threshold_niblack,
-                             threshold_sauvola)
 
-for im in ['./Exercise_3/data/images/'+ i + '.jpg' for i in img_names][0:3]:
+for im in ['./Exercise_3/data/images/' + i + '.jpg' for i in img_names][0:3]:
     image = Image.open(im)
     image = np.asarray(image)
     binary_global = image > threshold_otsu(image)
@@ -213,22 +209,22 @@ for im in ['./Exercise_3/data/images/'+ i + '.jpg' for i in img_names][0:3]:
 
     plt.figure(figsize=(8, 7))
     plt.subplot(2, 2, 1)
-    plt.imshow(image, cmap=plt.cm.gray)
+    plt.imshow(image, cmap=plt.get_cmap('gray'))
     plt.title('Original')
     plt.axis('off')
 
     plt.subplot(2, 2, 2)
     plt.title('Otsu Threshold')
-    plt.imshow(binary_global, cmap=plt.cm.gray)
+    plt.imshow(binary_global, cmap=plt.get_cmap('gray'))
     plt.axis('off')
 
     plt.subplot(2, 2, 3)
-    plt.imshow(binary_niblack, cmap=plt.cm.gray)
+    plt.imshow(binary_niblack, cmap=plt.get_cmap('gray'))
     plt.title('Niblack Threshold')
     plt.axis('off')
 
     plt.subplot(2, 2, 4)
-    plt.imshow(binary_sauvola, cmap=plt.cm.gray)
+    plt.imshow(binary_sauvola, cmap=plt.get_cmap('gray'))
     plt.title('Sauvola Threshold')
     plt.axis('off')
 

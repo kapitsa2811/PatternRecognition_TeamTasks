@@ -3,10 +3,8 @@ import numpy as np
 from PIL import Image
 
 
-
-
 def calculateFeatureVector(filename):
-    img= loadAndResizeImg(filename)
+    img = loadAndResizeImg(filename)
     return getFeatureVector(img)
 
 
@@ -26,7 +24,6 @@ def getLowerContur(column):
         if column[i] == False:
             return i
     return 0
-
 
 
 def getUpperContur(column):
@@ -80,10 +77,9 @@ def calculateFeatures(column):
     features.append(getFractionOfBlackPxBtwLcAndUc(column, features[0], features[1]))
     features[0] = float(features[0]/199)
     features[1] = float(features[1]/199)
+
     return features
-   # features.append(getGradientDifferenceLcUc(column))
-
-
+    # features.append(getGradientDifferenceLcUc(column))
 
 
 def getFeatureVector(a):
