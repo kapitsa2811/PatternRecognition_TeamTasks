@@ -13,10 +13,10 @@ def loadAndResizeImg(filename):
     G = np.zeros((200, 200))
 
     # Where we set the RGB for each pixel
-    G[img > 150] = True
-    G[img <= 150] = False
-    img = G
-    return img
+    G[img > 0.5] = True  # white pixels
+    G[img <= 0.5] = False  # black pixels
+
+    return G
 
 
 def getLowerContur(column):
