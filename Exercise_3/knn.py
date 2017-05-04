@@ -1,15 +1,20 @@
 from math import sqrt
+import numpy as np
 
 from Exercise_3.FeatureVectorGeneration import calculateFeatureVector
 
 
-def vectorDistance(t1, t2):
-    sum = 0
-    for i in range(len(t1)):
-        sum += (t1[i] - t2[i]) ** 2
-    return sqrt(sum)
+# def vectorDistance(t1, t2):
+#    sum = 0
+#    for i in range(len(t1)):
+#        sum += (t1[i] - t2[i]) ** 2
+#    return sqrt(sum)
 
+# faster:
 
+def vectorDisance(t1, t2):
+    # Calculates the euclidean distance of two vectors.
+    return np.sqrt(np.sum(np.square(v1-v2)))
 
 
 def DTWDistance(s1, s2):
@@ -30,6 +35,6 @@ def DTWDistance(s1, s2):
 
 
 img1 = calculateFeatureVector("test.jpg")
-img2= calculateFeatureVector("test2.jpg")
+img2 = calculateFeatureVector("test2.jpg")
 
 print(DTWDistance(img1,img2))
