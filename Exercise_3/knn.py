@@ -14,7 +14,7 @@ from Exercise_3.FeatureVectorGeneration import calculateFeatureVector
 
 def vectorDisance(t1, t2):
     # Calculates the euclidean distance of two vectors.
-    return np.sqrt(np.sum(np.square(v1-v2)))
+    return np.sqrt(np.sum(np.square(t1-t2)))
 
 
 def DTWDistance(s1, s2):
