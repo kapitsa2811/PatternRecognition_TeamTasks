@@ -1,12 +1,32 @@
 # Imports
+import csv
+import os.path
+
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
+
+import pickle
+
 sys.path.append('./Exercise_3')
 from FeatureVectorGeneration import calculateFeatureVector
 
 # Change the default colormap to gray
 plt.rcParams['image.cmap'] = 'gray'
+
+
+def loadFeatureVector(id):
+    if os.path.exists('./Exercise_3/data/feature_vectors/' + id + '.pkl'):
+        file = open('./Exercise_3/data/feature_vectors/' + id + '.pkl','rb')
+        vector = pickle.load(file)
+        file.close()
+        return vector
+    else:
+        vector = calculateFeatureVector('./Exercise_3/data/cropped_words/' + id + '.png')
+        file = open('./Exercise_3/data/feature_vectors/' + id + '.pkl','wb')
+        pickle.dump(vector, file)
+        file.close()
+        return vector
 
 
 class Word:
@@ -43,9 +63,9 @@ class Word:
         self.docNr = int(id[0:3])
         self.lineNr = int(id[4:6])
         self.wordNr = int(id[7:9])
-        self.img = plt.imread('./Exercise_3/data/cropped_words/' + id + '.jpg')
+        self.img = plt.imread('./Exercise_3/data/cropped_words/' + id + '.png')
         self.transcript = transcript
-        self.featureVector = calculateFeatureVector('./Exercise_3/data/cropped_words/' + id + '.jpg')
+        self.featureVector = loadFeatureVector(id)
 
 # create a list of all words
 

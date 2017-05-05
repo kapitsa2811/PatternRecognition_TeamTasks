@@ -5,6 +5,7 @@ from PIL import Image
 
 def calculateFeatureVector(filename):
     img = loadAndResizeImg(filename)
+
     return getFeatureVector(img)
 
 
