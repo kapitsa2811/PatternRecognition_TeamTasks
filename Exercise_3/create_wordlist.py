@@ -69,32 +69,32 @@ class Word:
 
 # create a list of all words
 
-wordlist = list()
+def loadWordlist():
+    wordlist = list()
 
-with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
-    for line in f:
-        id, transcript = str.split(line, " ")
-        wordlist.append(Word(id, transcript))
+    with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
+        for line in f:
+            id, transcript = str.split(line, " ")
+            wordlist.append(Word(id, transcript))
+    return wordlist
 
-del f, id, line, transcript
 
 # divide them into training and validation set
 
-with open('./Exercise_3/data/task/valid.txt') as v:
-    valid_docNr = v.read().splitlines()
+def wordlistToDatasets(wordlist):
+    with open('./Exercise_3/data/task/valid.txt') as v:
+        valid_docNr = v.read().splitlines()
 
-del v
+    del v
 
-valid_docNr = [int(x) for x in valid_docNr]
+    valid_docNr = [int(x) for x in valid_docNr]
 
-train = list()
-valid = list()
+    train = list()
+    valid = list()
 
-for word in wordlist:
-    if word.docNr in valid_docNr:
-        valid.append(word)
-    else:
-        train.append(word)
-
-del word, wordlist, valid_docNr
-
+    for word in wordlist:
+        if word.docNr in valid_docNr:
+            valid.append(word)
+        else:
+            train.append(word)
+    return train, valid

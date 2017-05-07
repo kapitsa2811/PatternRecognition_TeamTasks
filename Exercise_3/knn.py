@@ -1,12 +1,21 @@
 from math import sqrt
 import numpy as np
+import matplotlib.pyplot as plt
 
 from FeatureVectorGeneration import calculateFeatureVector
+from create_wordlist import loadWordlist
+from scipy.spatial.distance import euclidean
+from fastdtw import fastdtw
+
+
+
 
 
 def vectorDistance(t1, t2):
-    # Calculates the euclidean distance of two vectors.
-    return np.sqrt(np.sum(np.square(t1-t2)))
+    sum = 0
+    for i in range(len(t1)):
+        sum += (t1[i] - t2[i]) ** 2
+    return sqrt(sum)
 
 
 def DTWDistance(s1, s2):
@@ -25,8 +34,13 @@ def DTWDistance(s1, s2):
 
     return sqrt(DTW[len(s1)-1, len(s2)-1])
 
-
-img1 = calculateFeatureVector("test.jpg")
-img2 = calculateFeatureVector("test2.jpg")
-
-print(DTWDistance(img1,img2))
+wordlist = loadWordlist()
+distances = list()
+for i in wordlist[4:1000]:
+    dist, x = fastdtw(np.array(i.featureVector), np.array(wordlist[3].featureVector), dist=euclidean)
+    distances.append(dist)
+    print(distances)
+distances = sorted(distances)
+print(distances[:20])
+plt.plot(distances)
+plt.show()
