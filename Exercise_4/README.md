@@ -41,7 +41,7 @@ this snippet represents the (nonsense) molecule with two atoms, P and O, bonded 
 
 ## Description
 
-In this exercise, a KNN classifier is trained with a training set of 250 molecules, using the approximate GED and then 250 molecules of the validation set are classified into two classes.
+In this exercise, the molecules of the validation set are classified using KNN with the approximate graph edit distance (GED). The validation set and the training set contain 250 molecules each.
 
 In a first step, the provided dataset is converted into an appropriate data structure. Each molecule is represented as an object of class `Molecule` with the following attributes
 - `id` : the integer part of the molecules filename
