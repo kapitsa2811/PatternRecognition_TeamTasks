@@ -6,9 +6,9 @@
 - numpy 1.12.0
 
 ## Data
-The folder `Exercise_04/data/gxl` contains 500 [gxl-files](https://en.wikipedia.org/wiki/GXL), each representing a graph of a molecular compound. Each molecule has either activity against HIV or not. So we consider two classes, active (a) and inactive (i).
+The folder `Exercise_04/data/gxl` contains 500 [gxl-files](https://en.wikipedia.org/wiki/GXL), each representing a graph of a molecular compound. Each molecule has either activity against HIV or not. So we consider two classes, active (a) and inactive (i). The files are named with a unique number, which we consider as an identification number (id).
 
-The files `Exercise_04/data/train.txt`and `Exercise_04/data/valid.txt` contain the partitioning into training and validation set (each contains 250 molecules), as well as the ground-truth, i.e. if the molecule belongs to the class 'active' or 'inactive'. In both files, each line stands for one molecule, first stating the number of the corresponding file and then separated by a space, the letter 'a' or 'i' for the class the molecule belongs to.
+The files `Exercise_04/data/train.txt`and `Exercise_04/data/valid.txt` contain the partitioning into training and validation set (each contains 250 molecules), as well as the ground-truth, i.e. if the molecule belongs to the class 'active' or 'inactive'. In both files, each line represents one molecule in two columns (separated by a simple space). The first column states the identification number of the molecule and the second column contains either the letter 'a' or 'i', representing the  class the molecule belongs to.
 
 The gxl-files are structured as follows
 
