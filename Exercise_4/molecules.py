@@ -11,6 +11,32 @@ import numpy as np
 
 
 class Molecule:
+    """ A class for representing molecules.
+
+    Parameters
+    ----------
+    id : str
+        The string contains a human readable number, representing the filename of the molecule.
+     truth : str
+        Human readable string containing the ground truth of the molecules class.
+        It's either 'a' for active, or 'i' for inactive.
+
+     Attributes
+     ----------
+     id : int
+        The number contained in the molecules filename, extracted from parameter 'id'.
+     atoms : list
+        A list of strings, each string represents an atom with its chemical symbol.
+     length : int
+        The number of atoms, i.e. the length of tha atoms list.
+     adj_mat : ndarray
+        2D array containing the covalence bonds between the atoms stored in the atoms list.
+        0 means no bond, 1 means single linkage and 2 means double linkage.
+     truth : str
+        Human readable string containing the ground truth of the molecules class.
+        Either 'a' for active or 'i' for inactive.
+
+    """
 
     def __init__(self, id, truth):
         filename = './data/gxl/' + id + '.gxl'
@@ -20,11 +46,9 @@ class Molecule:
         self.adj_mat = get_adj_mat(filename, self.length)
         self.truth = truth
 
-    def set_truth(self, str):
-        self.truth = str
-
 
 def get_atoms(filename):
+    """ Return a list of all atoms from the molecule stored in 'filename'. """
     tree = ET.parse(filename)
     atoms = list()
     for node in tree.findall(".//node/attr/string"):
@@ -34,6 +58,7 @@ def get_atoms(filename):
 
 
 def get_adj_mat(filename, n):
+    """ Return the adjacency matrix from the molecule stored in 'filename'. """
     tree = ET.parse(filename)
     adj_mat = np.zeros((n, n), dtype=int)
     for edge in tree.findall(".//edge"):
@@ -46,14 +71,15 @@ def get_adj_mat(filename, n):
 
 
 def load_molecules(name):
-
+    """ Return a list with all molecules listed in the file Exercies_4/data/name.txt"""
     mols = list()
-
     with open('./data/' + name + '.txt') as f:
         for line in f:
             id, truth = str.split(line, " ")
             mols.append(Molecule(id, truth))
     return mols
+
+# Get the training- and validation sets
 
 train = load_molecules('train')
 valid = load_molecules('valid')

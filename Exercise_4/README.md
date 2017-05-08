@@ -2,7 +2,8 @@
 
 
 ## Packages
-
+- xml.etree.ElementTree
+- numpy 1.12.0
 
 ## Data
 The folder `Exercise_04/data/gxl` contains 500 [gxl-files](https://en.wikipedia.org/wiki/GXL), each representing a graph of a molecular compound. Each molecule has either activity against HIV or not. So we consider two classes, active (a) and inactive (i).
