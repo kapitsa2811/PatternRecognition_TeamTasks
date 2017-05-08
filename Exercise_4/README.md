@@ -50,6 +50,10 @@ In a first step, the provided dataset is converted into an appropriate data stru
 - `adj_mat` : the adjacency matrix, corresponding to the order of the atoms list
 - `truth` : either 'a' (active) or 'i' (inactive), the ground truth
 
+Then the molecules are divided into training- and validation-set.
+
+In a next step, the cost matrices between all possible combinations of molecules (one from the training set and one from the validation set) are calcualted.
+
 
 ## Instructions
 

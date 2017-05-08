@@ -8,6 +8,7 @@ Pattern Recognition - Exercise 4
 
 import xml.etree.ElementTree as ET
 import numpy as np
+import itertools
 
 
 class Molecule:
@@ -29,6 +30,9 @@ class Molecule:
         A list of strings, each string represents an atom with its chemical symbol.
      length : int
         The number of atoms, i.e. the length of tha atoms list.
+     degree : ndarray
+        1D array of length 'length', containing positive integer values, representing the degree
+        of each atom (from list 'atoms'), i.e. number of edges connected to the node (atom).
      adj_mat : ndarray
         2D array containing the covalence bonds between the atoms stored in the atoms list.
         0 means no bond, 1 means single linkage and 2 means double linkage.
@@ -45,6 +49,7 @@ class Molecule:
         self.length = len(self.atoms)
         self.adj_mat = get_adj_mat(filename, self.length)
         self.truth = truth
+        self.degree = np.sum(self.adj_mat, axis=0)
 
 
 def get_atoms(filename):
@@ -71,7 +76,7 @@ def get_adj_mat(filename, n):
 
 
 def load_molecules(name):
-    """ Return a list with all molecules listed in the file Exercies_4/data/name.txt"""
+    """ Return a list with all molecules listed in the file 'Exercise_4/data/name.txt'. """
     mols = list()
     with open('./data/' + name + '.txt') as f:
         for line in f:
@@ -83,3 +88,35 @@ def load_molecules(name):
 
 train = load_molecules('train')
 valid = load_molecules('valid')
+
+def calc_cost_matrix(mol1, mol2):
+    """ Returns the cost matrix for two given molecules."""
+
+    # read how many atoms each molecule has
+    n = mol1.length
+    m = mol2.length
+
+    # set the costs
+    Cn = 1  # cost for node deletion/insertion:
+    Ce = 1  # cost for edge deletion/insertion
+
+    # initiate cost matrix, filled with zeros
+    cost_mat = np.zeros((n+m, n+m), dtype=float)
+
+    # enter deletion for mol1
+    upper_right = np.diag(Cn + Ce*mol1.degree)
+    upper_right[upper_right == 0] = -1
+    cost_mat[:n, m:] = upper_right
+
+    # enter insertions for mol2
+    lower_left = np.diag(Cn + Ce*mol2.degree)
+    lower_left[lower_left == 0] = -1
+    cost_mat[n:, :m] = lower_left
+
+    # enter substitutions
+    mat = np.array([a!=b for a, b in itertools.product(mol1.atoms, mol2.atoms)])
+    mat = mat.reshape((n, m))
+    mat = mat*2*Cn
+    cost_mat[:n, :m] = mat
+
+    return cost_mat
