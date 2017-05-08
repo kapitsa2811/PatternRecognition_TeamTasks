@@ -36,7 +36,7 @@ The gxl-files are structured as follows
   </graph>
 </gxl>
 ```
-this snippet represents the (nonsense) molecule with two atoms, P and O, bonded with valence 1. So a molecule is represented as a graph, atoms are edges, where their label are their chemical symbol, and the covalent bond between atoms are edges, where their labels are the valence of their linkage.
+this snippet represents the (nonsense) molecule with two atoms, P and O, bonded with valence 1. So a molecule is represented as a graph: atoms are edges, where their labels are their chemical symbol, and the covalent bonds between atoms are edges, where their labels are the valence of their linkage (simple or double).
 
 
 ## Description
