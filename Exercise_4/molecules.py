@@ -23,9 +23,10 @@ class Molecule:
     
     Notes
     -----
-    A molecule is represented as a undirected graph. Each atom is a node and atom-atom-connections are edges.
-    In the following, atom and node is used interchangeably. When we talk about the atom-atom-connections,
-    we always use the term edge.
+    A molecule is represented as a undirected graph. Each atom is a node and each atom-atom-connection is an edge.
+    Node labels are the chemical symbols for the corresponding atom.
+    In the following, the terms atom and node is used interchangeably.
+    When we talk about the atom-atom-connections, we always use the term edge.
     
     The Molecule objects are created from a .gxl file. The file names are of the form XXX.gxl, where XXX is a
     positive integer number of length 2 to 5 without leading zeros.

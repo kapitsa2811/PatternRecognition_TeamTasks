@@ -4,6 +4,9 @@
 ## Packages
 - xml.etree.ElementTree
 - numpy 1.12.0
+- scipy 0.19.0
+- itertools
+- time
 
 ## Data
 The folder `Exercise_04/data/gxl` contains 500 [gxl-files](https://en.wikipedia.org/wiki/GXL), each representing a graph of a molecular compound. Each molecule has either activity against HIV or not. So we consider two classes, active (a) and inactive (i). The files are named with a unique number, which we consider as an identification number (id).
@@ -36,26 +39,57 @@ The gxl-files are structured as follows
   </graph>
 </gxl>
 ```
-this snippet represents the (nonsense) molecule with two atoms, P and O, bonded with valence 1. So a molecule is represented as a graph: atoms are edges, where their labels are their chemical symbol, and the covalent bonds between atoms are edges, where their labels are the valence of their linkage (simple or double).
+this snippet represents the (nonsense) molecule with two atoms, P and O, bonded with valence 1. So a molecule is represented as a graph: atoms are edges, where their labels are their chemical symbol, and the covalent bonds between atoms are edges, where their labels are the valence of their linkage (single or double). For this task, we don't distinguish between single or double linkages between atoms. We only consider if two atoms are connected or not. Hence we ignore the edge label.
 
 
 ## Description
 
-In this exercise, the molecules of the validation set are classified using KNN with the approximate graph edit distance (GED). The validation set and the training set contain 250 molecules each.
+In this exercise, the molecules of the validation set are classified using KNN with the approximate graph edit distance (aGED). The validation set and the training set contain 250 molecules each.
 
 In a first step, the provided dataset is converted into an appropriate data structure. Each molecule is represented as an object of class `Molecule` with the following attributes
-- `id` : the integer part of the molecules filename
-- `atoms` : a (ordered) list with its atoms
-- `atoms_num` : number of atoms
-- `adj_mat` : the adjacency matrix, corresponding to the order of the atoms list
-- `truth` : either 'a' (active) or 'i' (inactive), the ground truth
-- `degree`: number of edges for each atom
+- `id` : the molecules identification number
+- `atoms` : a (ordered) list with the molecules atoms
+- `atoms_num` : number of total atoms
+- `adj_mat` : the adjacency matrix, corresponding to the order of elements in `atoms`, either 0 for not linked or 1 for linked
+- `truth` : the ground truth, either 1 for active, 0 for inactive or -1 for undefined
+- `degree`: number of edges for each atom (corresponding to the order of elements in `atoms`)
 
-Then the molecules are divided into training- and validation-set.
+And the molecules are divided into training- and validation-set.
 
-In a next step, the cost matrices between all possible combinations of molecules (one from the training set and one from the validation set) are calculated.
+In a second step, the aGED between all possible combinations of molecules (one from the training set and one from the validation set) are calculated by solving the [assignment problem](https://en.wikipedia.org/wiki/Assignment_problem) with the cost matrix C, using the [Hungarian algorithm](https://en.wikipedia.org/wiki/Hungarian_algorithm) from the  [scipy.optimize framework](https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.optimize.linear_sum_assignment.html). For further elaborations on the calculations of the entries of the matrix see, see section [Calculating cost matrix C](Exercise_4#calculating-cost-matrix-c).
 
-In a final step, kNN is performed for different values of k and the accuracy is printed.
+In a third and final step, kNN is performed for different values of k and the accuracy is printed. As distance to compare two molecules, the (approximate) graph edit distance is used.
+
+## Calculating cost matrix C
+
+Let n be the number of atoms of molecule 1 and m the number of atoms of molecule 2.
+
+The (n+m) x (n+m) cost matrix C has four parts:
+1. Upper left: substitutions (nodes plus adjacent edges)  ->  c_i,j for i in 1..n and j in 1..m
+2. Upper right: deletions (nodes plus adjacent edges)  ->  c_i,eps for i in 1..n on the diagonal, rest are 99999
+3. Lower left: insertions (nodes plus adjacent edges)  ->  c_eps,j for j in 1..m on the diagonal, rest are 99999
+4. Lower right: dummy assignments (eps → eps)  ->  0
+
+Assume u_i to be a node from molecule 1 and v_i a node from molecule 2.
+Let P_i be the set of all adjacent edges to u_i and Q_i the set of all adjacent edges to v_i.
+
+Then, the entries (c_i,j / c_i,eps / c_eps,j) of the cost matrix C are:
+- Deletion costs include the deletion of the node u_i as well as the deletion of all edges in P_i :
+    c_i,eps = c(u_i -> eps) + sum_{p in P_i} c(p -> eps)
+- Insertion costs include the insertion of the node v_i as well as the insertion of all edges in Q_i :
+    c_eps,j = c(eps -> v_j) + sum_{q in Q_i} c(eps -> q)
+- Substitution costs include the node substitution (u_i -> v_i) as well as an estimation of the
+  edge assignment cost C(P_i -> Q_j) :
+    c_i,j = c(u_i -> v_j) + C(P_i -> Q_j)
+
+For insertion and deletion cost we consider the Dirac cost function, where we fix two positive numbers Ce and Cn:
+- node substitution: c(u_i -> v_j) = 2*Cn if symbols are not equal, c(u_i -> v_j) = 0 otherwise
+- node deletion/insertion: c(u_i -> eps) = c(eps -> v_j) = Cn
+- edge deletion/insertion: c(p -> eps) = c(eps -> q) = Ce
+
+The estimation of the edge assignment costs C(P_i -> Q_j) are assumed to be the number of edges that have to be
+either deleted or inserted to get from P_i to Q_j. Hence the absolute value of the difference in node number of
+the two sets: abs(| P_i | - | Q_j |).
 
 ## Instructions
 
