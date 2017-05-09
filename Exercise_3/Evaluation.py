@@ -25,7 +25,7 @@ start_time = timeit.default_timer()
 wordlist = loadWordlist()
 train, test = wordlistToDatasets(wordlist)
 train = train
-test = test
+test = test[5:6]
 
 results = Pool(2).map(worker, test)
 

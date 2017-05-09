@@ -18,7 +18,7 @@ def calculateDistances(word, words):
     return distances
 
 def getThreshold(distances):
-    distances.sort();
+    distances = sorted(distances, key=lambda x: x[0])
     largest = 0
     counter = 0
     for i in range(1, len(distances)):
@@ -42,7 +42,7 @@ def showPlot(distances, threshhold):
 def getMostSimilar(distances):
     threshhold =  getThreshold(distances)
     mostSimilar = list()
-    distances.sort()
+    distances = sorted(distances, key=lambda x: x[0])
     #showPlot(distances, threshhold)
     for i in distances:
         if i[0] < threshhold:
