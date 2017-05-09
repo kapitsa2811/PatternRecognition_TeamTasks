@@ -17,33 +17,17 @@ def getConfusionMatrix(i, retrieved, train):
     tn = len(train)- tp -fn -fp
     return tp, fp, tn, fn
 
-def worker(list):
-    results = []
-    for i in list:
-        results.append((i, getSimilarImages(i, train)))
-        print(threading.current_thread())
-        print("finished one calculation")
-    return results
+def worker(i):
+    return (i, getSimilarImages(i, train))
 
 start_time = timeit.default_timer()
 
 wordlist = loadWordlist()
 train, test = wordlistToDatasets(wordlist)
-train = train[:400]
-test = test[:8]
+train = train
+test = test
 
-chunks = np.array_split(np.array(test),os.cpu_count())
-chunks = [x.tolist() for x in chunks]
-
-with Pool(2)as p:
-    r = p.map(worker, chunks, 1)
-    p.close()
-    p.join()
-
-
-results = []
-for i in r:
-    results.extend(i)
+results = Pool(2).map(worker, test)
 
 tp = 0
 fp = 0
