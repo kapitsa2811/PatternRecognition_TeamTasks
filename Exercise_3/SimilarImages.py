@@ -33,10 +33,17 @@ def getThreshold(distances):
         largest = 40
     return (abs(largest - distances[0][0])*percentage)+distances[0][0]
 
+def showPlot(distances, threshhold):
+    blah = [x[0] for x in distances]
+    plt.plot(blah)
+    plt.axhline(y=threshhold, color='r')
+    plt.show()
+
 def getMostSimilar(distances):
     threshhold =  getThreshold(distances)
     mostSimilar = list()
     distances.sort()
+    #showPlot(distances, threshhold)
     for i in distances:
         if i[0] < threshhold:
             mostSimilar.append(i[1])

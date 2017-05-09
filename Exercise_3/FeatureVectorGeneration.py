@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 
+height = 30
+width = 120
 
 def calculateFeatureVector(filename):
     img = loadAndResizeImg(filename)
@@ -10,12 +12,17 @@ def calculateFeatureVector(filename):
 
 
 def loadAndResizeImg(filename):
-    img = np.asarray(Image.open(filename).resize((200, 200)))
-    G = np.zeros((200, 200))
+    img = Image.open(filename)
+    img_resized = img.resize((int(img.width/(1.3*(img.height/height))), height))
+    if img_resized.width > width:
+        img_resized = img_resized.resize((width, height))
+
+    G = np.full((height,width), True, dtype=bool)
+    npImg = np.asarray(img_resized)
 
     # Where we set the RGB for each pixel
-    G[img > 0.5] = True  # white pixels
-    G[img <= 0.5] = False  # black pixels
+    G[npImg > 0.5] = True  # white pixels
+    G[npImg <= 0.5] = False  # black pixels
 
     return G
 
@@ -31,7 +38,7 @@ def getUpperContur(column):
     for i in reversed(range(len(column))):
         if column[i] == False:
             return i
-    return 199
+    return height-1
 
 
 def getBWTransitions(column):
@@ -56,7 +63,7 @@ def getFractionOfBlackPxBtwLcAndUc(column, lc, uc):
     if lc == None or uc == None:
         return None
     counter = 0
-    upperBound = uc + 1 if uc +1 <=200 else 200
+    upperBound = uc + 1 if uc +1 <=height else height
     for i in range(lc,upperBound):
         if column[i] == False:
             counter = counter +1
@@ -76,8 +83,8 @@ def calculateFeatures(column):
     features.append(getBWTransitions(column)/7)
     features.append(getFractionOfBlackPxInWindow(column))
     features.append(getFractionOfBlackPxBtwLcAndUc(column, features[0], features[1]))
-    features[0] = float(features[0]/199)
-    features[1] = float(features[1]/199)
+    features[0] = float(features[0]/(height-1))
+    features[1] = float(features[1]/(height-1))
 
     return features
     # features.append(getGradientDifferenceLcUc(column))
@@ -85,9 +92,8 @@ def calculateFeatures(column):
 
 def getFeatureVector(a):
     featureList = list()
-    for i in range(200):
+    for i in range(width):
         featureList.append(calculateFeatures(a[:,i]))
-
     return featureList
 
 
