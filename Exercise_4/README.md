@@ -62,34 +62,38 @@ In a third and final step, kNN is performed for different values of k and the ac
 
 ## Calculating cost matrix C
 
-Let n be the number of atoms of molecule 1 and m the number of atoms of molecule 2.
+Let `n` be the number of atoms of molecule 1 and `m` the number of atoms of molecule 2.
 
-The (n+m) x (n+m) cost matrix C has four parts:
-1. Upper left: substitutions (nodes plus adjacent edges)  ->  c_i,j for i in 1..n and j in 1..m
-2. Upper right: deletions (nodes plus adjacent edges)  ->  c_i,eps for i in 1..n on the diagonal, rest are 99999
-3. Lower left: insertions (nodes plus adjacent edges)  ->  c_eps,j for j in 1..m on the diagonal, rest are 99999
+The `(n+m)x(n+m)` cost matrix `C` has four parts:
+1. Upper left: substitutions (nodes plus adjacent edges)  ->  `c_i,j` for `i` in 1..n and `j` in 1..m
+2. Upper right: deletions (nodes plus adjacent edges)  ->  `c_i,eps` for `i` in 1..n on the diagonal, rest are 99999
+3. Lower left: insertions (nodes plus adjacent edges)  ->  `c_eps,j` for `j` in 1..m on the diagonal, rest are 99999
 4. Lower right: dummy assignments (eps → eps)  ->  0
 
-Assume u_i to be a node from molecule 1 and v_i a node from molecule 2.
-Let P_i be the set of all adjacent edges to u_i and Q_i the set of all adjacent edges to v_i.
+Assume `u_i` to be a node from molecule 1 and `v_i` a node from molecule 2.
+Let `P_i` be the set of all adjacent edges to `u_i` and `Q_i` the set of all adjacent edges to `v_i`.
 
-Then, the entries (c_i,j / c_i,eps / c_eps,j) of the cost matrix C are:
-- Deletion costs include the deletion of the node u_i as well as the deletion of all edges in P_i :
-    c_i,eps = c(u_i -> eps) + sum_{p in P_i} c(p -> eps)
+Then, the entries (`c_i,j` / `c_i,eps` / `c_eps,j`) of the cost matrix `C` are:
+- Deletion costs include the deletion of the node `u_i` as well as the deletion of all edges in `P_i` :
+      c_i,eps = c(u_i -> eps) + sum_{p in P_i} c(p -> eps)
 - Insertion costs include the insertion of the node v_i as well as the insertion of all edges in Q_i :
-    c_eps,j = c(eps -> v_j) + sum_{q in Q_i} c(eps -> q)
+      c_eps,j = c(eps -> v_j) + sum_{q in Q_i} c(eps -> q)
 - Substitution costs include the node substitution (u_i -> v_i) as well as an estimation of the
   edge assignment cost C(P_i -> Q_j) :
-    c_i,j = c(u_i -> v_j) + C(P_i -> Q_j)
+      c_i,j = c(u_i -> v_j) + C(P_i -> Q_j)
 
-For insertion and deletion cost we consider the Dirac cost function, where we fix two positive numbers Ce and Cn:
-- node substitution: c(u_i -> v_j) = 2*Cn if symbols are not equal, c(u_i -> v_j) = 0 otherwise
-- node deletion/insertion: c(u_i -> eps) = c(eps -> v_j) = Cn
-- edge deletion/insertion: c(p -> eps) = c(eps -> q) = Ce
+For insertion and deletion cost we consider the Dirac cost function, where we fix two positive numbers `Ce` and `Cn`:
+- node substitution: `c(u_i -> v_j) = 2*Cn` if symbols are not equal, `c(u_i -> v_j) = 0` otherwise
+- node deletion/insertion: `c(u_i -> eps) = c(eps -> v_j) = Cn`
+- edge deletion/insertion: `c(p -> eps) = c(eps -> q) = Ce`
 
-The estimation of the edge assignment costs C(P_i -> Q_j) are assumed to be the number of edges that have to be
-either deleted or inserted to get from P_i to Q_j. Hence the absolute value of the difference in node number of
-the two sets: abs(| P_i | - | Q_j |).
+The estimation of the edge assignment costs `C(P_i -> Q_j)` are assumed to be the number of edges that have to be
+either deleted or inserted to get from `P_i` to `Q_j`. Hence `C(P_i -> Q_j)` is the absolute value of the difference in node number between the two sets: `abs(|P_i|-|Q_j|)`.
+
+Combining this all together:
+- `c_i,eps = Cn + |P_i|*Ce`
+- `c_eps,j = Cn + |Q_j]*Ce`
+- `c_i,j = 2*Cn + abs(|P_i|-|Q_j|)` if the symbols are equal and `c_i,j = abs(|P_i|-|Q_j|)` otherwise
 
 ## Instructions
 
