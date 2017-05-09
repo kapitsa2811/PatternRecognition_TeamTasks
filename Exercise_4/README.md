@@ -56,7 +56,7 @@ In a first step, the provided dataset is converted into an appropriate data stru
 
 And the molecules are divided into training- and validation-set.
 
-In a second step, the aGED between all possible combinations of molecules (one from the training set and one from the validation set) are calculated by solving the [assignment problem](https://en.wikipedia.org/wiki/Assignment_problem) with the cost matrix C, using the [Hungarian algorithm](https://en.wikipedia.org/wiki/Hungarian_algorithm) from the  [scipy.optimize framework](https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.optimize.linear_sum_assignment.html). For further elaborations on the calculations of the entries of the matrix see, see section [Calculating cost matrix C](Exercise_4#calculating-cost-matrix-c).
+In a second step, the aGED between all possible combinations of molecules (one from the training set and one from the validation set) are calculated by solving the [assignment problem](https://en.wikipedia.org/wiki/Assignment_problem) with the cost matrix C, using the [Hungarian algorithm](https://en.wikipedia.org/wiki/Hungarian_algorithm) from the  [scipy.optimize framework](https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.optimize.linear_sum_assignment.html). For further elaborations on the calculations of the entries of the matrix see, see section [Calculating cost matrix C](#calculating-cost-matrix-c).
 
 In a third and final step, kNN is performed for different values of k and the accuracy is printed. As distance to compare two molecules, the (approximate) graph edit distance is used.
 
