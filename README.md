@@ -47,3 +47,11 @@ Each exercise has its own folder and its own README file.
     * [Instructions](Exercise_3#instructions)
     * [Results](Exercise_3#results)
     * [Conclusion](Exercise_3#conclusion)
+
+* [Exercise 4 - Molecules](Exercise_4)
+    * [Packages](Exercise_4#packages)
+    * [Data](Exercise_4#data)
+    * [Description](Exercise_4#description)
+    * [Instructions](Exercise_4#instructions)
+    * [Results](Exercise_4#results)
+    * [Conclusion](Exercise_4#conclusion)
