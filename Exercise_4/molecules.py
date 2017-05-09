@@ -135,7 +135,7 @@ def calc_dist(mol1, mol2, Cn, Ce):
     1. Upper left: substitutions (nodes plus adjacent edges)  ->  c_i,j for i in 1..n and j in 1..m
     2. Upper right: deletions (nodes plus adjacent edges)  ->  c_i,eps for i in 1..n on the diagonal, rest are 99999
     3. Lower left: insertions (nodes plus adjacent edges)  ->  c_eps,j for j in 1..m on the diagonal, rest are 99999
-    4. Lower right: dummy assignments (eps → eps)  ->  0
+    4. Lower right: dummy assignments (eps -> eps)  ->  0
     
     Assume u_i to be a node from molecule 1 and v_i a node from molecule 2.
     Let P_i be the set of all adjacent edges to u_i and Q_i the set of all adjacent edges to v_i.
