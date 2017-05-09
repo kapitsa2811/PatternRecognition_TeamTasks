@@ -174,7 +174,7 @@ should be uncommented (per default this part is commented, hence not active).
 
 The accuracy is displayed in the following table
 
-k | Cn = 1 Ce = 1 | Cn = 1 Ce = 2 | Cn = 1 Ce = 3| Cn = 1 Ce = 4 | Cn = 2 Ce = 1 | Cn = 3 Ce = 1 | Cn = 4 Ce = 1
+k | Cn=1 Ce=1 | Cn=1 Ce=2 | Cn=1 Ce=3 | Cn=1 Ce=4 | Cn=2 Ce=1 | Cn=3 Ce=1 | Cn=4 Ce=1
 --- | --- | --- | --- | --- | --- | --- | ---
 **1** | 0.992 | 0.992| 0.996 | 0.996 | 0.988 | 0.988 | 0.988
 **3** |0.996 | 0.996 | 0.996 | 0.996 | 0.992 | 0.992 | 0.992
