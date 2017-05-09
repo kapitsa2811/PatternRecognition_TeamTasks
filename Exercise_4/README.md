@@ -8,6 +8,7 @@
 - itertools
 - time
 
+
 ## Data
 The folder `Exercise_04/data/gxl` contains 500 [gxl-files](https://en.wikipedia.org/wiki/GXL), each representing a graph of a molecular compound. Each molecule has either activity against HIV or not. So we consider two classes, active (a) and inactive (i). The files are named with a unique number, which we consider as an identification number (id).
 
@@ -60,6 +61,7 @@ In a second step, the aGED between all possible combinations of molecules (one f
 
 In a third and final step, kNN is performed for different values of k and the accuracy is printed. As distance to compare two molecules, the (approximate) graph edit distance is used.
 
+
 ## Calculating cost matrix C
 
 Let `n` be the number of atoms of molecule 1 and `m` the number of atoms of molecule 2.
@@ -100,9 +102,10 @@ Combining this all together:
 - `c_eps,j = Cn + |Q_j]*Ce`
 - `c_i,j = 2*Cn + abs(|P_i|-|Q_j|)` if the symbols are equal and `c_i,j = abs(|P_i|-|Q_j|)` otherwise
 
+
 ## Instructions
 
-The script `molecules.py` can be run at once and everything will be done.
+The script `molecules.py` can be run at once and everything will be done. It takes about 8 minutes.
 
 In the settings part, the deletion/insertion costs for edges and nodes can be defined, as well as a list of parameters k for kNN
 ```python
@@ -113,7 +116,7 @@ In the settings part, the deletion/insertion costs for edges and nodes can be de
 
 # set the costs
 Cn = 1  # cost for node deletion/insertion
-Ce = 1  # cost for edge deletion/insertion
+Ce = 3  # cost for edge deletion/insertion
 
 # set k-values for kNN
 K = [1, 3, 5, 10, 15]
@@ -128,7 +131,7 @@ the part
 
 
 # save the computed distances
-np.save('dist_1_1', dist)
+np.save('dist_1_3', dist)
 
 # note the naming: 'dist_x_y' means the distances
 # have been calculated with Cn = x and Ce = y.
@@ -159,21 +162,34 @@ should be commented (üer default this part is uncommented, hence active) and (2
 
 
 # load the file
-dist = np.load('./distances/dist_1_1.npy')
+dist = np.load('./distances/dist_1_3.npy')
 
 # note the naming: 'dist_x_y' means the distances
 # been calculated with Cn = x and Ce = y.
 ```
 should be uncommented (per default this part is commented, hence not active).
 
+
 ## Results
-acc | Cn = 1 , Ce = 1
---- | ---
-k = 1 | 0.992
-k = 3 |0.996
-k = 5 |0.996
-k = 10 |0.992
-k = 15 | 0.988
+
+The accuracy is displayed in the following table
+
+ | Cn = 1 , Ce = 1 | Cn = 1 , Ce = 2 | Cn = 1 , Ce = 3| Cn = 1 , Ce = 4 | Cn = 2 , Ce = 1 | Cn = 3 , Ce = 1 | Cn = 4 , Ce = 1
+--- | --- | --- | --- | ---
+**k = 1** | 0.992 | 0.992| 0.996 | 0.996 | 0.988 | 0.988 | 0.988
+**k = 3** |0.996 | 0.996 | 0.996 | 0.996 | 0.992 | 0.992 | 0.992
+**k = 5** |0.996 | 0.996 | 0.996 | 0.996 | 0.992 | 0.992 | 0.992
+**k = 10** |0.992 | 0.992 | 0.992 | 0.992 | 0.988 | 0.988 | 0.988
+**k = 15** | 0.988 | 0.992 | 0.992 | 0.992 | 0.988 | 0.988 | 0.988
 
 
 ## Conclusion
+
+For the tested combinations of `k`, `Cn` and `Ce`, we get accuracies ranging from 0.988 to 0.996. So the accuracy is over all pretty good.
+
+For all choices of `Cn` and `Ce`, `k=3` and `k=5` yield the best accuracy.
+For `Cn=1` & `Ce=3` and `Cn=1` & `Ce=4`, `k=1` yields the same accuracy as `k=3` and `k=5`.
+
+For `k=3` and `k=5`, the combinations `Cn=1` & `Ce=1`, `Cn=1` & `Ce=2`, `Cn=1` & `Ce=3` and `Cn=1` & `Ce=4` all yield the same best accuracy of 0.996.
+
+So, edge insertion/deletions should cost either the same as node insertion/deletions, or a multiple.

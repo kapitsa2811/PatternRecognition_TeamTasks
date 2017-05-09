@@ -114,7 +114,7 @@ def load_molecules(name):
     with open('./data/' + name + '.txt') as f:
         for line in f:
             id, truth = str.split(line, " ")
-            truth = truth.rstrip()
+            truth = truth.rstrip()  # remove the '\n'
             mols.append(Molecule(id, truth))
     return mols
 
@@ -218,7 +218,7 @@ def calc_dist(mol1, mol2, Cn, Ce):
 
 # set the costs
 Cn = 1  # cost for node deletion/insertion
-Ce = 1  # cost for edge deletion/insertion
+Ce = 3  # cost for edge deletion/insertion
 
 # set k-values for kNN
 K = [1, 3, 5, 10, 15]
@@ -254,7 +254,7 @@ print()
 #
 #
 # # save the computed distances
-# np.save('./distances/dist_1_1', dist)
+# np.save('./distances/dist_1_3', dist)
 #
 # # note the naming: 'dist_x_y' means the distances
 # # have been calculated with Cn = x and Ce = y.
@@ -293,7 +293,7 @@ for k in K:
     if k == 1:
         pred = np.concatenate(neigh)
     else:
-        pred = [np.argmax(np.bincount(row)) for row in neigh]
+        pred = np.array([np.argmax(np.bincount(row)) for row in neigh])
 
     # get the ground truth of the molecules in valid
     truth = np.array([valid[i].truth for i in range(len(valid))])
