@@ -76,13 +76,16 @@ Let `P_i` be the set of all adjacent edges to `u_i` and `Q_i` the set of all adj
 Then, the entries (`c_i,j` / `c_i,eps` / `c_eps,j`) of the cost matrix `C` are:
 - Deletion costs include the deletion of the node `u_i` as well as the deletion of all edges in `P_i` :
 
-      `c_i,eps = c(u_i -> eps) + sum_{p in P_i} c(p -> eps)`
+      c_i,eps = c(u_i -> eps) + sum_{p in P_i} c(p -> eps)
 
 - Insertion costs include the insertion of the node v_i as well as the insertion of all edges in Q_i :
-      `c_eps,j = c(eps -> v_j) + sum_{q in Q_i} c(eps -> q)`
+
+      c_eps,j = c(eps -> v_j) + sum_{q in Q_i} c(eps -> q)
+
 - Substitution costs include the node substitution (u_i -> v_i) as well as an estimation of the
   edge assignment cost C(P_i -> Q_j) :
-      `c_i,j = c(u_i -> v_j) + C(P_i -> Q_j)`
+
+      c_i,j = c(u_i -> v_j) + C(P_i -> Q_j)
 
 For insertion and deletion cost we consider the Dirac cost function, where we fix two positive numbers `Ce` and `Cn`:
 - node substitution: `c(u_i -> v_j) = 2*Cn` if symbols are not equal, `c(u_i -> v_j) = 0` otherwise
