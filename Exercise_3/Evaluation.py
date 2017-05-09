@@ -24,8 +24,8 @@ tn = 0
 fn = 0
 
 for i in test[:10]:
-    retrieved = getSimilarImages(i, train[:1000])
-    tpt, fpt, tnt, fnt = getConfusionMatrix(i, retrieved, train[:1000])
+    retrieved = getSimilarImages(i, train)
+    tpt, fpt, tnt, fnt = getConfusionMatrix(i, retrieved, train)
     tp += tpt
     fp += fpt
     tn += tnt
