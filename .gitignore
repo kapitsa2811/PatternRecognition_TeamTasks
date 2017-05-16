@@ -1,11 +1,10 @@
 # pycharm project
 .idea/
 
-# everyone keeps his/her own data files
+# everyone keeps his/her own data files - except ex3 (makes setup easier)
 *.csv
 Exercise_2a/data/*
 Exercise_2b/data/*
-Exercise_3/data/*
 
 # R history file
 .Rhistory

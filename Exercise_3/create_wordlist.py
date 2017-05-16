@@ -7,23 +7,27 @@ import matplotlib.pyplot as plt
 import sys
 
 import pickle
-
-sys.path.append('./Exercise_3')
 from FeatureVectorGeneration import calculateFeatureVector
+
+# paths
+
+FEATURES_PATH = 'data/feature_vectors/'
+WORD_PATH = 'data/cropped_words/'
+TRANSCRIPT_PATH = 'data/input_documents/transcription.txt'
 
 # Change the default colormap to gray
 plt.rcParams['image.cmap'] = 'gray'
 
 
 def loadFeatureVector(id):
-    if os.path.exists('./Exercise_3/data/feature_vectors/' + id + '.pkl'):
-        file = open('./Exercise_3/data/feature_vectors/' + id + '.pkl','rb')
+    if os.path.exists(FEATURES_PATH + id + '.pkl'):
+        file = open(FEATURES_PATH + id + '.pkl','rb')
         vector = pickle.load(file)
         file.close()
         return vector
     else:
-        vector = calculateFeatureVector('./Exercise_3/data/cropped_words/' + id + '.png')
-        file = open('./Exercise_3/data/feature_vectors/' + id + '.pkl','wb')
+        vector = calculateFeatureVector(WORD_PATH + id + '.png')
+        file = open(FEATURES_PATH + id + '.pkl','wb')
         pickle.dump(vector, file)
         file.close()
         return vector
@@ -63,8 +67,8 @@ class Word:
         self.docNr = int(id[0:3])
         self.lineNr = int(id[4:6])
         self.wordNr = int(id[7:9])
-        self.img = plt.imread('./Exercise_3/data/cropped_words/' + id + '.png')
-        self.transcript = transcript
+        self.img = plt.imread(WORD_PATH + id + '.png')
+        self.transcript = transcript.replace("\n","")
         self.featureVector = loadFeatureVector(id)
 
 # create a list of all words
@@ -72,7 +76,7 @@ class Word:
 def loadWordlist():
     wordlist = list()
 
-    with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
+    with open(TRANSCRIPT_PATH) as f:
         for line in f:
             id, transcript = str.split(line, " ")
             wordlist.append(Word(id, transcript))
@@ -81,8 +85,8 @@ def loadWordlist():
 
 # divide them into training and validation set
 
-def wordlistToDatasets(wordlist):
-    with open('./Exercise_3/data/task/valid.txt') as v:
+def wordlistToDatasets(wordlist, split_file):
+    with open(split_file) as v:
         valid_docNr = v.read().splitlines()
 
     del v
@@ -97,4 +101,12 @@ def wordlistToDatasets(wordlist):
             valid.append(word)
         else:
             train.append(word)
+
+    with open('data/validation/keywords.txt') as t:
+        keywords = t.read().splitlines()
+
+        for word in valid:
+            if word.transcript not in keywords:
+                valid.remove(word)
+
     return train, valid

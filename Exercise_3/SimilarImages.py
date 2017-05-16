@@ -1,10 +1,7 @@
-from math import sqrt
-import numpy as np
 import matplotlib.pyplot as plt
-
-from FeatureVectorGeneration import calculateFeatureVector
-from create_wordlist import loadWordlist, wordlistToDatasets
+import numpy as np
 from scipy.spatial.distance import euclidean
+
 from fastdtw import fastdtw
 
 percentage = 0.7
@@ -46,7 +43,7 @@ def getMostSimilar(distances):
     #showPlot(distances, threshhold)
     for i in distances:
         if i[0] < threshhold:
-            mostSimilar.append(i[1])
+            mostSimilar.append(i)
         else:
             break
     return mostSimilar
