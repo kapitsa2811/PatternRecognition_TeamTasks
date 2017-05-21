@@ -4,7 +4,7 @@ from scipy.spatial.distance import euclidean
 
 from fastdtw import fastdtw
 
-percentage = 0.7
+percentage = 0.9
 limit = 0.2
 
 def calculateDistances(word, words):
