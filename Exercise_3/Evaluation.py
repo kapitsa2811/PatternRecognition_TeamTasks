@@ -33,8 +33,8 @@ def random_subset(list, size):
     return out
 
 
-test = random_subset(test, 10)
-
+test = random_subset(test, 40)
+#test= test[480:520]
 results = Pool(2).map(worker, test)
 
 
