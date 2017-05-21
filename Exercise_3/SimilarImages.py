@@ -14,7 +14,7 @@ This class is responsible for calculating the most similar images to the desired
  selection process.
 
 """
-percentage = 0.7
+percentage = 0.9
 limit = 0.2
 
 def calculateDistances(word, words):
