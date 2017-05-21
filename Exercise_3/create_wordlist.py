@@ -10,7 +10,6 @@ import pickle
 from FeatureVectorGeneration import calculateFeatureVector
 
 # paths
-
 FEATURES_PATH = 'data/feature_vectors/'
 WORD_PATH = 'data/cropped_words/'
 TRANSCRIPT_PATH = 'data/input_documents/transcription.txt'
@@ -59,8 +58,8 @@ class Word:
         2D array containing the pixel values of the word's image.
      transcript : str
         Human readable string containing the transcription of the word on a character basis.
-     featureVector : list ??? TODO
-        ??? TODO
+     featureVector : list of vectors
+        The list of feature vectors for the specific image
      
     """
     def __init__(self, id, transcript):

@@ -4,6 +4,16 @@ from scipy.spatial.distance import euclidean
 
 from fastdtw import fastdtw
 
+
+"""
+This class is responsible for calculating the most similar images to the desired image
+ and returning them.
+ To calculate it we used an approach where we set a specific limit, and if two items
+ have a distance greater than this limit, we say that the two images are too different, and we
+ limit the amount we return like this. See readme.md for visual representation of the
+ selection process.
+
+"""
 percentage = 0.7
 limit = 0.2
 

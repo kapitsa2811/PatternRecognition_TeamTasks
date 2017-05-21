@@ -8,6 +8,12 @@ from create_wordlist import loadWordlist, wordlistToDatasets
 
 RESULTS_PATH = 'results.txt'
 
+"""
+This Class is responsible for handling the evaluation. It calculates the tp, fp, fn, tn and
+with it the accuracy.
+It then prints everything into the desired form and stores it into a text file.
+"""
+
 def getConfusionMatrix(i, retrieved, train):
     tp = [x[1].transcript for x in retrieved].count(i.transcript)
     fp = len(retrieved) - tp
