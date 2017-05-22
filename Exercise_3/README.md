@@ -89,7 +89,7 @@ We decided to pick a percentage of 0.9, because the precision is close to the on
 ## Results
 Because we do not have the possibility to access performant computers / clusters. We had to limit the amount of test files we used for the results.
 Therefore we picked 50 images at random from the test set.
-TOOn average the precision was : 18% , the recall: 7%
+The average the precision was : 18% , the recall: 7%
 
 
 ## Conclusion
