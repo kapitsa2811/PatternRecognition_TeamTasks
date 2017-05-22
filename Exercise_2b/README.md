@@ -29,7 +29,7 @@ The script will output the results of the three steps as well as the total accur
 As in exercise 2a, the script (here `mlp.py`) can be run at once. Several adjustments can be done in the settings part of the script.
 
 ## Results
-The full output of the script (run with the entire data set) can be found in the file `output.txt`.
+The full output of the script (run with the entire data set) can be found in the file `output_cv.txt`.
 
 ### First cross-validation (for number of neurons and learning rate)
 The top ten parameter combinations regarding accuracy during the first cross-validation are:
