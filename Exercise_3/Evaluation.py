@@ -29,7 +29,7 @@ def worker(i):
 start_time = timeit.default_timer()
 
 wordlist = loadWordlist()
-train, test = wordlistToDatasets(wordlist, 'data/validation/splits/valid.txt')
+train, test = wordlistToDatasets(wordlist, 'data/validation/splits/test.txt')
 
 
 def random_subset(list, size):
@@ -39,7 +39,7 @@ def random_subset(list, size):
     return out
 
 
-test = random_subset(test, 50)
+#test = random_subset(test, 50)
 #test= test[480:520]
 results = Pool(2).map(worker, test)
 

@@ -97,15 +97,8 @@ def wordlistToDatasets(wordlist, split_file):
 
     for word in wordlist:
         if word.docNr in valid_docNr:
-            valid.append(word)
-        else:
             train.append(word)
-
-    with open('data/validation/keywords.txt') as t:
-        keywords = t.read().splitlines()
-
-        for word in valid:
-            if word.transcript not in keywords:
-                valid.remove(word)
+        else:
+            valid.append(word)
 
     return train, valid
