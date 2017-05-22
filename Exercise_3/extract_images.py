@@ -13,9 +13,29 @@ try:
 except ImportError:
     from skimage import filter as filters
 
+# data paths
+
+LOCATIONS = 'data/input_documents/locations/'
+IMAGES = 'data/input_documents/images/'
+TRANSCRIPT = 'data/input_documents/transcription.txt'
+TEMP = 'data/temp_images/'
+OUTPUT = 'data/cropped_words/'
+
+# choose which methods to use for backgroun shizzl removal
+# choose 'sauvola', otsu', 'niblack'
+
+method = 'sauvola'
+
+# create all folders
+for directory in [LOCATIONS, IMAGES, TEMP, OUTPUT]:
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+
 # =============================================#
 #             Functions definitions            #
 # =============================================#
+
 
 
 def ExtractPaths(location_file):
@@ -125,15 +145,15 @@ def RemoveBackground(img, method, window_size = 25, k = 0.8):
 # Extract all locations for all files
 
 locations = {}
-for file in os.listdir('./Exercise_3/data/ground-truth/locations/'):
-    temp = ExtractPaths('./Exercise_3/data/ground-truth/locations/' + file)
+for file in os.listdir(LOCATIONS):
+    temp = ExtractPaths(LOCATIONS + file)
     locations.update(temp)
 del temp, file
 
 # =============================================
 # Get all words ids
 IDs = []
-with open('./Exercise_3/data/ground-truth/transcription.txt') as f:
+with open(TRANSCRIPT) as f:
     for line in f:
         IDs.append(line.split(sep=" ")[0])
 IDs = [ids.split(sep="-") for ids in IDs]
@@ -146,28 +166,28 @@ IDs = [ids.split(sep="-") for ids in IDs]
 img_names = [str(i) for i in range(270, 280)]
 img_names.extend([str(i) for i in range(300, 305)])
 
-for method in ['otsu', 'sauvola']:
-    img_name = [i + '.jpg' for i in img_names]
-    for im in img_name:
-        image = Image.open('./Exercise_3/data/images/' + im)
-        image = np.asarray(image)
-        image = RemoveBackground(img=image, method=method)
-        ims(name='./Exercise_3/data/filtered_images/'+ method + '/' + im.replace('jpg', 'png'), arr=image)
+
+img_name = [i + '.jpg' for i in img_names]
+for im in img_name:
+    image = Image.open(IMAGES + im)
+    image = np.asarray(image)
+    image = RemoveBackground(img=image, method=method)
+    ims(name=TEMP + '/' + im.replace('jpg', 'png'), arr=image)
 
 # =============================================
 # Produce a cropped image for each word, remove background and save
 
-for method in ['otsu', 'sauvola']:
-    for ids in IDs:
-        path = tuple(ids)
-        temp = ExtractImage('./Exercise_3/data/filtered_images/' + method + '/' + path[0] + '.png', locations, path,
+
+for ids in IDs:
+    path = tuple(ids)
+    temp = ExtractImage(TEMP + '/' + path[0] + '.png', locations, path,
                             crop=True)
-        # Image is rectangular, crop mask is non-rectangular polygon so need to set undesired px as white
-        temp = np.ma.filled(temp, 1)
-        ims(name='Exercise_3/data/cropped_words/' + method + '/' + path[0] + '-' + path[1] + '-' + path[2]
+    # Image is rectangular, crop mask is non-rectangular polygon so need to set undesired px as white
+    temp = np.ma.filled(temp, 1)
+    ims(name=OUTPUT + '/' + path[0] + '-' + path[1] + '-' + path[2]
                          + '.png', arr=temp)
 
-
+'''
 # =============================================#
 #       Example section and visualization      #
 # =============================================#
@@ -183,7 +203,7 @@ file = '271'
 line = '22'
 word = '04'
 path = (file, line, word)
-temp = ExtractImage('./Exercise_3/data/images/' + file + '.jpg', locations, path, crop=True)
+temp = ExtractImage(IMAGES + file + '.jpg', locations, path, crop=True)
 plt.imshow(temp, cmap=plt.get_cmap('gray'))
 plt.show()
 del path
@@ -195,7 +215,7 @@ del path
 
 # Source code based on http://scikit-image.org/docs/dev/auto_examples/segmentation/plot_niblack_sauvola.html
 
-for im in ['./Exercise_3/data/images/' + i + '.jpg' for i in img_names][0:3]:
+for im in [IMAGES + i + '.jpg' for i in img_names][0:3]:
     image = Image.open(im)
     image = np.asarray(image)
     binary_global = image > threshold_otsu(image)
@@ -228,4 +248,4 @@ for im in ['./Exercise_3/data/images/' + i + '.jpg' for i in img_names][0:3]:
     plt.title('Sauvola Threshold')
     plt.axis('off')
 
-    plt.show()
+    plt.show()'''

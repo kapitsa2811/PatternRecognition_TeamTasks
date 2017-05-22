@@ -1,13 +1,20 @@
-from math import sqrt
-import numpy as np
 import matplotlib.pyplot as plt
-
-from FeatureVectorGeneration import calculateFeatureVector
-from create_wordlist import loadWordlist, wordlistToDatasets
+import numpy as np
 from scipy.spatial.distance import euclidean
+
 from fastdtw import fastdtw
 
-percentage = 0.7
+
+"""
+This class is responsible for calculating the most similar images to the desired image
+ and returning them.
+ To calculate it we used an approach where we set a specific limit, and if two items
+ have a distance greater than this limit, we say that the two images are too different, and we
+ limit the amount we return like this. See readme.md for visual representation of the
+ selection process.
+
+"""
+percentage = 0.9
 limit = 0.2
 
 def calculateDistances(word, words):
@@ -18,7 +25,7 @@ def calculateDistances(word, words):
     return distances
 
 def getThreshold(distances):
-    distances.sort();
+    distances = sorted(distances, key=lambda x: x[0])
     largest = 0
     counter = 0
     for i in range(1, len(distances)):
@@ -33,13 +40,20 @@ def getThreshold(distances):
         largest = 40
     return (abs(largest - distances[0][0])*percentage)+distances[0][0]
 
+def showPlot(distances, threshhold):
+    blah = [x[0] for x in distances]
+    plt.plot(blah)
+    plt.axhline(y=threshhold, color='r')
+    plt.show()
+
 def getMostSimilar(distances):
     threshhold =  getThreshold(distances)
     mostSimilar = list()
-    distances.sort()
+    distances = sorted(distances, key=lambda x: x[0])
+    #showPlot(distances, threshhold)
     for i in distances:
         if i[0] < threshhold:
-            mostSimilar.append(i[1])
+            mostSimilar.append(i)
         else:
             break
     return mostSimilar
