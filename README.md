@@ -12,6 +12,20 @@ Team tasks to lecture "Pattern Recognition" at University of Fribourg.
 ### Language
 - Python 3.6.1
 
+## Final Validation
+
+The final validation of the three Exercises has been performed and the results can be found in the corresponding folder.
+
+### Exercise 2
+
+For the MNIST task, the MLP has been chosen over the SVM. The final validation of exercise 2 has been done in the file `Exercise_2/validation.py` and the results can be found in the file `Exercise_2/output.txt`.
+
+### Exercise 3
+
+### Exercise 4
+
+The final validation of exercise 4 has been done in the file `Exercise_4/validation.py` and the results can be found in the file `Exercise_4/output.txt`.
+
 ## Content
 
 Each exercise has its own folder and its own README file.
