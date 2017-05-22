@@ -14,7 +14,7 @@ Team tasks to lecture "Pattern Recognition" at University of Fribourg.
 
 ## Final Validation
 
-The final validation of the three Exercises has been performed and the results can be found in the corresponding folder.
+The final validation of the three Exercises (MNIST, KWS and Molecules) has been performed and the results can be found in the corresponding folders.
 
 ### Exercise 2
 
