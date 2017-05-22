@@ -29,6 +29,8 @@ For the MNIST task, the MLP has been chosen over the SVM. The final validation o
 
 ### Exercise 3
 
+The final validation of exercise 3 has been done in the file Exercise_3/Evaluation.py and the results can be found in the file `Exercise_3/results.txt`. As training set, the 1167 provided words are used and can be found in Exercise_3/data/cropped_words/. The test set contains 10 words also located in the same folder.
+
 ### Exercise 4
 
 The final validation of exercise 4 has been done in the file `Exercise_4/validation.py` and the results can be found in the file `Exercise_4/output.txt`. As training set, the same 250 molecules are used as in the exercise itself (can be found in `Exercise_4/data/glx/` according to the entries in the file `Exercise_4/data/train.txt`). The test set contains 1'500 molecules, located in the folder `Exercise_4/data/test/`. For the costs used in the Dirac cost function, `Cn = Ce = 1` was taken and for kNN, `k = 3`was chosen.
