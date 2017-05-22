@@ -37,7 +37,7 @@ class Molecule:
     ----------
     id : str
         The string contains a human readable number, representing the integer part of the filename of the molecule.
-     truth : str
+    truth : str
         Human readable string containing the ground truth of the molecules class.
         It's either 'a' for active, or 'i' for inactive.
 
