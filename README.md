@@ -18,13 +18,20 @@ The final validation of the three Exercises (MNIST, KWS and Molecules) has been 
 
 ### Exercise 2
 
-For the MNIST task, the MLP has been chosen over the SVM. The final validation of exercise 2 has been done in the file `Exercise_2b/validation.py` and the results can be found in the file `Exercise_2b/output.txt`.
+For the MNIST task, the MLP has been chosen over the SVM. The final validation of exercise 2 has been done in the file `Exercise_2b/validation.py` and the results can be found in the file `Exercise_2b/output.txt`. As training set, the same file is used as the one used during the exercise (`train.csv`, containig 26'999 samples). As test set, a new file, `mnist_test.csv`, containing 10'000 samples, was used. The parameters were chosen as follows:
+- number of hidden layer = 1
+- number of neurons = 100
+- activation function for the hidden layers = rectified linear unit function
+- solver for weight optimization = stochastic gradient descent
+- learning rate = 0.1 (constant)
+- maximum number iterations = 200
+- tolerance for optimization = 0.0001
 
 ### Exercise 3
 
 ### Exercise 4
 
-The final validation of exercise 4 has been done in the file `Exercise_4/validation.py` and the results can be found in the file `Exercise_4/output.txt`. As training set, the same 250 molecules are taken as in the exercise itself (can be found in `Exercise_4/data/glx/` according to the entries in the file `Exercise_4/data/train.txt`). The test set contains 1'500 molecules, located in the folder `Exercise_4/data/test/`. For the costs used in the Dirac cost function, `Cn = Ce = 1` was taken and for kNN, `k = 3`was chosen.
+The final validation of exercise 4 has been done in the file `Exercise_4/validation.py` and the results can be found in the file `Exercise_4/output.txt`. As training set, the same 250 molecules are used as in the exercise itself (can be found in `Exercise_4/data/glx/` according to the entries in the file `Exercise_4/data/train.txt`). The test set contains 1'500 molecules, located in the folder `Exercise_4/data/test/`. For the costs used in the Dirac cost function, `Cn = Ce = 1` was taken and for kNN, `k = 3`was chosen.
 
 ## Content
 
