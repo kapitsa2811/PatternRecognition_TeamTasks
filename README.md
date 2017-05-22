@@ -18,7 +18,7 @@ The final validation of the three Exercises has been performed and the results c
 
 ### Exercise 2
 
-For the MNIST task, the MLP has been chosen over the SVM. The final validation of exercise 2 has been done in the file `Exercise_2/validation.py` and the results can be found in the file `Exercise_2/output.txt`.
+For the MNIST task, the MLP has been chosen over the SVM. The final validation of exercise 2 has been done in the file `Exercise_2b/validation.py` and the results can be found in the file `Exercise_2b/output.txt`.
 
 ### Exercise 3
 
