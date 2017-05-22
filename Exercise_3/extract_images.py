@@ -152,19 +152,21 @@ del temp, file
 
 # =============================================
 # Get all words ids
-IDs = []
-with open(TRANSCRIPT) as f:
-    for line in f:
-        IDs.append(line.split(sep=" ")[0])
-IDs = [ids.split(sep="-") for ids in IDs]
+IDs = list(locations.keys())
+#p = list(locations.keys())
+#k = p[3]
+#with open(TRANSCRIPT) as f:
+#    for line in f:
+#        IDs.append(line.split(sep=" ")[0])
+#IDs = [ids.split(sep="-") for ids in IDs]
 
 # =============================================
 # Create and save a filtered version of the image files
 # /!\  Create folder 'filtered_images' in folder 'data' and  /!\
 # /!\     place two subfolders 'sauvola' and 'otsu' in it    /!\
 
-img_names = [str(i) for i in range(270, 280)]
-img_names.extend([str(i) for i in range(300, 305)])
+img_names = [str(i) for i in range(305, 310)]
+#img_names.extend([str(i) for i in range(300, 305)])
 
 
 img_name = [i + '.jpg' for i in img_names]
