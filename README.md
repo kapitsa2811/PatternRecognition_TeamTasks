@@ -28,19 +28,37 @@ For this task, the MLP has been chosen over the SVM. The final validation of exe
 - tolerance for optimization = 0.0001
 
 The output file with the results is formatted like
+
       test_ID1 predicted_class1
       test_ID2 predicted_class2
+      test_ID3 predicted_class3
       ...
 
-where `test_IDX` refers to row X of the file `mnist_test.csv` and `predicted_classX` refers to the class prediction (0, 1, ... , 9) for the X-th row in the file `mnist_test.csv`.
+where `test_IDx` refers to row x of the file `mnist_test.csv` and `predicted_classx` refers to the class prediction (0, 1, ... , 9) for the x-th row in the file `mnist_test.csv`.
 
 ### Exercise 3 - KWS
 
 The final validation of exercise 3 has been done in the file `Exercise_3/Evaluation.py` and the results can be found in the file `Exercise_3/results.txt`. As training set, the 1'177 provided words were used and can be found in the folder `Exercise_3/data/cropped_words/`. The test set contains 10 words and they're listed in the file `Exercise_3/data/validation/keywords.txt`.
 
+The output file with the results is formatted like
+
+      Keyword1, testword_ID1, dissimilarity1, testword_ID2, dissimilarity2, ...
+      Keyword2, testword_ID1, dissimilarity1, testword_ID2, dissimilarity2, ...
+      Keyword2, testword_ID1, dissimilarity1, testword_ID2, dissimilarity2, ...
+      ...
+
 ### Exercise 4 - Molecules
 
 The final validation of exercise 4 has been done in the file `Exercise_4/validation.py` and the results can be found in the file `Exercise_4/output.txt`. As training set, the same 250 molecules are used as in the exercise itself (can be found in `Exercise_4/data/glx/` according to the entries in the file `Exercise_4/data/train.txt`). The test set contains 1'500 molecules, located in the folder `Exercise_4/data/test/`. For the costs used in the Dirac cost function, `Cn = Ce = 1` was taken and for kNN, `k = 3`was chosen.
+
+The output file with the results is formatted like
+
+      test_ID1 predicted_class1
+      test_ID2 predicted_class2
+      test_ID3 predicted_class3
+      ...
+
+where `test_IDx` refers to the molecule saved in the file `Exercise/data/test/test_IDx.glx` and `predicted_classx` refers to the class prediction (a or i) for the molecule saved in the file `Exercise/data/test/test_IDx.glx`.
 
 ## Content
 
