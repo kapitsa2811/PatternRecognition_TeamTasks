@@ -29,7 +29,7 @@ For the MNIST task, the MLP has been chosen over the SVM. The final validation o
 
 ### Exercise 3
 
-The final validation of exercise 3 has been done in the file Exercise_3/Evaluation.py and the results can be found in the file `Exercise_3/results.txt`. As training set, the 1167 provided words are used and can be found in Exercise_3/data/cropped_words/. The test set contains 10 words also located in the same folder.
+The final validation of exercise 3 has been done in the file `Exercise_3/Evaluation.py` and the results can be found in the file `Exercise_3/results.txt`. As training set, the provided 1'177 provided were used and can be found in the folder `Exercise_3/data/cropped_words/`. The test set contains 10 words and they can be found in the file `Exercise_3/data/validation/keywords.txt`.
 
 ### Exercise 4
 
