@@ -28,9 +28,10 @@ For this task, the MLP has been chosen over the SVM. The final validation of exe
 - tolerance for optimization = 0.0001
 
 The output file with the results is formatted like
-   test_ID1 predicted_class1
-   test_ID2 predicted_class2
-   ...
+      test_ID1 predicted_class1
+      test_ID2 predicted_class2
+      ...
+
 where `test_IDX` refers to row X of the file `mnist_test.csv` and `predicted_classX` refers to the class prediction (0, 1, ... , 9) for the X-th row in the file `mnist_test.csv`.
 
 ### Exercise 3 - KWS
