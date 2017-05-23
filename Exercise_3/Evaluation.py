@@ -49,7 +49,7 @@ def save_results(results):
     for result in results:
         out = result[0].transcript
         for tuple_ in result[1]:
-            out = out + ' ' + tuple_[1].transcript + ',' + str(tuple_[0])
+            out = out + ', ' + tuple_[1].transcript + ', ' + str(tuple_[0])
         print(out, file=file)
     file.close()
 

@@ -29,9 +29,9 @@ For this task, the MLP has been chosen over the SVM. The final validation of exe
 
 The output file with the results is formatted like
 
-      test_ID1 predicted_class1
-      test_ID2 predicted_class2
-      test_ID3 predicted_class3
+      test_ID1, predicted_class1
+      test_ID2, predicted_class2
+      test_ID3, predicted_class3
       ...
 
 where `test_IDx` refers to row x of the file `mnist_test.csv` and `predicted_classx` refers to the class prediction (0, 1, ... , 9) for the x-th row in the file `mnist_test.csv`.
@@ -53,9 +53,9 @@ The final validation of exercise 4 has been done in the file `Exercise_4/validat
 
 The output file with the results is formatted like
 
-      test_ID1 predicted_class1
-      test_ID2 predicted_class2
-      test_ID3 predicted_class3
+      test_ID1, predicted_class1
+      test_ID2, predicted_class2
+      test_ID3, predicted_class3
       ...
 
 where `test_IDx` refers to the molecule saved in the file `Exercise/data/test/test_IDx.glx` and `predicted_classx` refers to the class prediction (a or i) for the molecule saved in the file `Exercise/data/test/test_IDx.glx`.

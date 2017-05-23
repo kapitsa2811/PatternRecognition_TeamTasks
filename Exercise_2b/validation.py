@@ -68,6 +68,6 @@ print('Time elapsed: ' + repr(end-start) + ' s')
 file = open('output.txt', 'w')
 
 for i in range(test.shape[0]):
-    file.write(repr(i+1) + ' ' + repr(pred_labels[i]) + '\n')
+    file.write(repr(i+1) + ', ' + repr(pred_labels[i]) + '\n')
 
 file.close()

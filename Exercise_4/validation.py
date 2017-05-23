@@ -204,7 +204,7 @@ def calc_dist(mol1, mol2, Cn, Ce):
         c_i,eps = c(u_i -> eps) + sum_{p in P_i} c(p -> eps)
     - Insertion costs include the insertion of the node v_i as well as the insertion of all edges in Q_i :
         c_eps,j = c(eps -> v_j) + sum_{q in Q_i} c(eps -> q)
-    - Substitution costs include the node substitution (u_i -> v_i) as well as an estimation of the 
+    - Substitution costs include the node substitution (u_i -> v_i) as well as an estimation of the
       edge assignment cost C(P_i -> Q_j) :
         c_i,j = c(u_i -> v_j) + C(P_i -> Q_j)
 
@@ -214,7 +214,7 @@ def calc_dist(mol1, mol2, Cn, Ce):
     - node deletion/insertion: c(u_i -> eps) = c(eps -> v_j) = Cn
     - edge deletion/insertion: c(p -> eps) = c(eps -> q) = Ce
 
-    The estimation of the edge assignment costs C(P_i -> Q_j) are assumed to be the number of edges that have to be 
+    The estimation of the edge assignment costs C(P_i -> Q_j) are assumed to be the number of edges that have to be
     either deleted or inserted to get from P_i to Q_j. Hence the absolute value of the difference in node number of
     the two sets: abs(| P_i | - | Q_j |).
 
@@ -345,7 +345,6 @@ pred_str = ['a' if pr else 'i' for pr in pred]
 file = open('output.txt', 'w')
 
 for mol, pr in zip(test, pred_str):
-    file.write(repr(mol.id) + ' ' + pr + '\n')
+    file.write(repr(mol.id) + ', ' + pr + '\n')
 
 file.close()
-
