@@ -16,9 +16,9 @@ Team tasks to lecture "Pattern Recognition" at University of Fribourg.
 
 The final validation of the three Exercises (MNIST, KWS and Molecules) has been performed and the results can be found in the corresponding folders.
 
-### Exercise 2
+### Exercise 2 - MNIST
 
-For the MNIST task, the MLP has been chosen over the SVM. The final validation of exercise 2 has been done in the file `Exercise_2b/validation.py` and the results can be found in the file `Exercise_2b/output.txt`. As training set, the same file is used as the one used during the exercise (`train.csv`, containig 26'999 samples). As test set, a new file, `mnist_test.csv`, containing 10'000 samples, was used. The parameters were chosen as follows:
+For this task, the MLP has been chosen over the SVM. The final validation of exercise 2 has been done in the file `Exercise_2b/validation.py` and the results can be found in the file `Exercise_2b/output.txt`. As training set, the same file is used as the one used during the exercise (`train.csv`, containig 26'999 samples). As test set, a new file, `mnist_test.csv`, containing 10'000 samples, was used. The parameters were chosen as follows:
 - number of hidden layer = 1
 - number of neurons = 100
 - activation function for the hidden layers = rectified linear unit function
@@ -27,11 +27,11 @@ For the MNIST task, the MLP has been chosen over the SVM. The final validation o
 - maximum number iterations = 200
 - tolerance for optimization = 0.0001
 
-### Exercise 3
+### Exercise 3 - KWS
 
 The final validation of exercise 3 has been done in the file `Exercise_3/Evaluation.py` and the results can be found in the file `Exercise_3/results.txt`. As training set, the 1'177 provided words were used and can be found in the folder `Exercise_3/data/cropped_words/`. The test set contains 10 words and they're listed in the file `Exercise_3/data/validation/keywords.txt`.
 
-### Exercise 4
+### Exercise 4 - Molecules
 
 The final validation of exercise 4 has been done in the file `Exercise_4/validation.py` and the results can be found in the file `Exercise_4/output.txt`. As training set, the same 250 molecules are used as in the exercise itself (can be found in `Exercise_4/data/glx/` according to the entries in the file `Exercise_4/data/train.txt`). The test set contains 1'500 molecules, located in the folder `Exercise_4/data/test/`. For the costs used in the Dirac cost function, `Cn = Ce = 1` was taken and for kNN, `k = 3`was chosen.
 
