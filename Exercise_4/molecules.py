@@ -20,17 +20,17 @@ import time
 
 class Molecule:
     """ A class for representing molecules.
-    
+
     Notes
     -----
     A molecule is represented as a undirected graph. Each atom is a node and each atom-atom-connection is an edge.
     Node labels are the chemical symbols for the corresponding atom.
     In the following, the terms atom and node is used interchangeably.
     When we talk about the atom-atom-connections, we always use the term edge.
-    
+
     The Molecule objects are created from a .gxl file. The file names are of the form XXX.gxl, where XXX is a
     positive integer number of length 2 to 5 without leading zeros.
-    
+
     To create a molecule, the ground truth has to be given as well.
 
     Parameters
@@ -121,44 +121,44 @@ def load_molecules(name):
 
 def calc_dist(mol1, mol2, Cn, Ce):
     """ Returns the (approximate) graph edit distance of two given molecules using bipartite graph matching.
-    
+
     Note
     ----
     For further elaborations see 'pr-lecture10.pdf' slides 14-21 and 'pr-lecture9.pdf' slide 36.
-    
+
     The (approximate) GED is calculated by solving the assignment problem with the cost matrix C, using
     the Hungarian algorithm (from scipy.optimize).
-    
+
     Let n be the number of atoms of molecule 1 and m the number of atoms of molecule 2.
-    
+
     The (n+m) x (n+m) cost matrix C has four parts:
     1. Upper left: substitutions (nodes plus adjacent edges)  ->  c_i,j for i in 1..n and j in 1..m
     2. Upper right: deletions (nodes plus adjacent edges)  ->  c_i,eps for i in 1..n on the diagonal, rest are 99999
     3. Lower left: insertions (nodes plus adjacent edges)  ->  c_eps,j for j in 1..m on the diagonal, rest are 99999
     4. Lower right: dummy assignments (eps -> eps)  ->  0
-    
+
     Assume u_i to be a node from molecule 1 and v_i a node from molecule 2.
     Let P_i be the set of all adjacent edges to u_i and Q_i the set of all adjacent edges to v_i.
-    
+
     Then, the entries (c_i,j / c_i,eps / c_eps,j) of the cost matrix C are:
     - Deletion costs include the deletion of the node u_i as well as the deletion of all edges in P_i :
         c_i,eps = c(u_i -> eps) + sum_{p in P_i} c(p -> eps)
     - Insertion costs include the insertion of the node v_i as well as the insertion of all edges in Q_i :
         c_eps,j = c(eps -> v_j) + sum_{q in Q_i} c(eps -> q)
-    - Substitution costs include the node substitution (u_i -> v_i) as well as an estimation of the 
+    - Substitution costs include the node substitution (u_i -> v_i) as well as an estimation of the
       edge assignment cost C(P_i -> Q_j) :
         c_i,j = c(u_i -> v_j) + C(P_i -> Q_j)
-    
+
     For insertion and deletion cost we consider the Dirac cost function, where we fix two positive numbers Ce and Cn:
     - node substitution: c(u_i -> v_j) = 2*Cn if symbols are not equal,
                          c(u_i -> v_j) = 0    otherwise.
     - node deletion/insertion: c(u_i -> eps) = c(eps -> v_j) = Cn
     - edge deletion/insertion: c(p -> eps) = c(eps -> q) = Ce
-        
-    The estimation of the edge assignment costs C(P_i -> Q_j) are assumed to be the number of edges that have to be 
-    either deleted or inserted to get from P_i to Q_j. Hence the absolute value of the difference in node number of
-    the two sets: abs(| P_i | - | Q_j |).
-  
+
+    The estimation of the edge assignment costs C(P_i -> Q_j) are assumed to be the number of edges that have to be
+    either deleted or inserted to get from P_i to Q_j weighted with the cost Ce. Hence the absolute value of the
+    difference in node number of the two sets: abs(| P_i | - | Q_j |) * Ce.
+
     """
 
     # read how many atoms each molecule has
@@ -196,7 +196,7 @@ def calc_dist(mol1, mol2, Cn, Ce):
     upper_left = np.array(upper_left)  # convert to np-array
     upper_left = upper_left.reshape((n, m))  # convert this True/False vector to an (nxm) matrix
     upper_left = upper_left*2*Cn  # convert True to 2*Cn and False to 0
-    upper_left = upper_left + edge_ass_cost  # add the estimation of the edge assignment cost C(P_i -> C_j)
+    upper_left = upper_left + edge_ass_cost * Ce  # add the estimation of the edge assignment cost C(P_i -> C_j)
     cost_mat[:n, :m] = upper_left  # insert the part in the cost matrix
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -218,7 +218,7 @@ def calc_dist(mol1, mol2, Cn, Ce):
 
 # set the costs
 Cn = 1  # cost for node deletion/insertion
-Ce = 3  # cost for edge deletion/insertion
+Ce = 1  # cost for edge deletion/insertion
 
 # set k-values for kNN
 K = [1, 3, 5, 10, 15]
@@ -254,7 +254,7 @@ print()
 #
 #
 # # save the computed distances
-# np.save('./distances/dist_1_3', dist)
+# np.save('./distances/dist_1_1', dist)
 #
 # # note the naming: 'dist_x_y' means the distances
 # # have been calculated with Cn = x and Ce = y.
@@ -303,4 +303,3 @@ for k in K:
 
     print()
     print("accuracy for k = {}: {:.3f}".format(k, acc))
-

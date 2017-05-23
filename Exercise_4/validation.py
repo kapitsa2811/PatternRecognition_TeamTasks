@@ -215,8 +215,8 @@ def calc_dist(mol1, mol2, Cn, Ce):
     - edge deletion/insertion: c(p -> eps) = c(eps -> q) = Ce
 
     The estimation of the edge assignment costs C(P_i -> Q_j) are assumed to be the number of edges that have to be
-    either deleted or inserted to get from P_i to Q_j. Hence the absolute value of the difference in node number of
-    the two sets: abs(| P_i | - | Q_j |).
+    either deleted or inserted to get from P_i to Q_j weighted with the cost Ce. Hence the absolute value of the
+    difference in node number of the two sets: abs(| P_i | - | Q_j |) * Ce.
 
     """
 
@@ -256,7 +256,7 @@ def calc_dist(mol1, mol2, Cn, Ce):
     upper_left = np.array(upper_left)  # convert to np-array
     upper_left = upper_left.reshape((n, m))  # convert this True/False vector to an (nxm) matrix
     upper_left = upper_left * 2 * Cn  # convert True to 2*Cn and False to 0
-    upper_left = upper_left + edge_ass_cost  # add the estimation of the edge assignment cost C(P_i -> C_j)
+    upper_left = upper_left + edge_ass_cost * Ce  # add the estimation of the edge assignment cost C(P_i -> C_j)
     cost_mat[:n, :m] = upper_left  # insert the part in the cost matrix
 
     # ------------------------------------------------------------------------------------------------------------------
