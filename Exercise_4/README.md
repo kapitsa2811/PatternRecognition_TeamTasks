@@ -188,7 +188,8 @@ k | Cn=1 Ce=1 | Cn=1 Ce=2 | Cn=1 Ce=3 | Cn=1 Ce=4 | Cn=2 Ce=1 | Cn=3 Ce=1 | Cn=4
 For the tested combinations of `k`, `Cn` and `Ce`, we get accuracies ranging from 0.988 to 0.996. So the accuracy is over all pretty good.
 
 For all choices of `Cn` and `Ce`, `k=3` and `k=5` yield the best accuracy.
-For `Cn=1` & `Ce=3` and `Cn=1` & `Ce=4`, `k=1` yields the same accuracy as `k=3` and `k=5`.
+For `Cn=1` & `Ce=2`, `Cn=1` & `Ce=3` and `Cn=1` & `Ce=4`, `k=1` yields the same accuracy as `k=3` and `k=5`.
+For `Cn=1` & `Ce=4`, `k=10`also yields the same accuracy.
 
 For `k=3` and `k=5`, the combinations `Cn=1` & `Ce=1`, `Cn=1` & `Ce=2`, `Cn=1` & `Ce=3` and `Cn=1` & `Ce=4` all yield the same best accuracy of 0.996.
 
