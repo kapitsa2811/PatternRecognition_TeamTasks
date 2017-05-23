@@ -82,7 +82,7 @@ The results of the runs can be found [here](parameter%20selection).
 It was decided to pick a percentage of 0.9, because the precision is close to the one from lower percentages, but the recall is in a better spot.
 
 ## Instructions
-1. If the experiment should be reproduced, the git repo can just be cloned and working directory should be set to `Exercise_3/`. If the feature vector generation should be reproduced, the content of the folder `Exercise_3/data/feature_vectors/` has to be cleared.
+1. If the experiment should be reproduced, the git repo can just be cloned and the working directory should be set to `Exercise_3/`. If the feature vector generation should be reproduced, the content of the folder `Exercise_3/data/feature_vectors/` has to be cleared.
 2. The variable `test` in `Evaluation.py` can be adjusted to the number of images that should be tested.
 3. Finally, `Exercise_3/Evaluation.py` should be run.
 
