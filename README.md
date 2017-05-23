@@ -27,6 +27,12 @@ For this task, the MLP has been chosen over the SVM. The final validation of exe
 - maximum number iterations = 200
 - tolerance for optimization = 0.0001
 
+The output file with the results is formatted like
+   test_ID1 predicted_class1
+   test_ID2 predicted_class2
+   ...
+where `test_IDX` refers to row X of the file `mnist_test.csv` and `predicted_classX` refers to the class prediction (0, 1, ... , 9) for the X-th row in the file `mnist_test.csv`.
+
 ### Exercise 3 - KWS
 
 The final validation of exercise 3 has been done in the file `Exercise_3/Evaluation.py` and the results can be found in the file `Exercise_3/results.txt`. As training set, the 1'177 provided words were used and can be found in the folder `Exercise_3/data/cropped_words/`. The test set contains 10 words and they're listed in the file `Exercise_3/data/validation/keywords.txt`.
