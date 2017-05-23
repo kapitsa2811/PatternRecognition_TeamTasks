@@ -75,7 +75,7 @@ The plot below shows the similarities for the entire document. It can be noticed
 
 ![blue: sinilarities , red: limit](figure_1-3.png)
 
-A set of test runs have been done to fine-tune the `percentage` parameter. Therefore, it was looked for the `keywords.txt` images inside the train set.
+A set of test runs has been done to fine-tune the `percentage` parameter. Therefore, it was looked for the `keywords.txt` images inside the train set.
 
 The results of the runs can be found [here](parameter%20selection).
 
