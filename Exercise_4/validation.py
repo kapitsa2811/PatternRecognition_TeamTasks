@@ -215,8 +215,8 @@ def calc_dist(mol1, mol2, Cn, Ce):
     - edge deletion/insertion: c(p -> eps) = c(eps -> q) = Ce
 
     The estimation of the edge assignment costs C(P_i -> Q_j) are assumed to be the number of edges that have to be
-    either deleted or inserted to get from P_i to Q_j weighted with the cost Ce. Hence the absolute value of the
-    difference in node number of the two sets: abs(| P_i | - | Q_j |) * Ce.
+    either deleted or inserted to get from P_i to Q_j weighted with the cost of an edge insertion/deletion, Ce.
+    Hence the absolute value of the difference in node number of the two sets, times Ce: abs(| P_i | - | Q_j |) * Ce.
 
     """
 

@@ -95,12 +95,12 @@ For insertion and deletion cost we consider the Dirac cost function, where we fi
 - edge deletion/insertion: `c(p -> eps) = c(eps -> q) = Ce`
 
 The estimation of the edge assignment costs `C(P_i -> Q_j)` are assumed to be the number of edges that have to be
-either deleted or inserted to get from `P_i` to `Q_j`. Hence `C(P_i -> Q_j)` is the absolute value of the difference in node number between the two sets: `abs(|P_i|-|Q_j|)`.
+either deleted or inserted to get from `P_i` to `Q_j`, weighted with the cost `Ce` of an edge insertion/deletion. Hence `C(P_i -> Q_j)` is the absolute value of the difference in node number between the two sets times the cost of an edge deletion/insertion: `abs(|P_i|-|Q_j|) * Ce`.
 
 Combining this all together:
 - `c_i,eps = Cn + |P_i|*Ce`
 - `c_eps,j = Cn + |Q_j]*Ce`
-- `c_i,j = 2*Cn + abs(|P_i|-|Q_j|)` if the symbols are equal and `c_i,j = abs(|P_i|-|Q_j|)` otherwise
+- `c_i,j = 2*Cn + abs(|P_i|-|Q_j|)*Ce` if the symbols are equal and `c_i,j = abs(|P_i|-|Q_j|)*Ce` otherwise
 
 
 ## Instructions
